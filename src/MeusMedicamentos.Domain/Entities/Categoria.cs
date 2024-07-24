@@ -1,6 +1,6 @@
 namespace MeusMedicamentos.Domain.Entities;
 
-public class Categoria : Entity
+public sealed class Categoria : Entity
 {
     public Categoria(string nome)
     {
