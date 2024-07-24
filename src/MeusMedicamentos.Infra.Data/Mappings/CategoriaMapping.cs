@@ -11,7 +11,8 @@ public class CategoriaMapping : IEntityTypeConfiguration<Categoria>
         builder.Property(c => c.Id)
             .HasColumnName("CTG_ID")
             .HasColumnOrder(1)
-            .HasColumnType("uniqueidentifier")
+            .HasColumnType("int")
+            .IsRequired()
             .HasComment("Chave primária da categoria");
 
         builder.Property(c => c.Nome)
