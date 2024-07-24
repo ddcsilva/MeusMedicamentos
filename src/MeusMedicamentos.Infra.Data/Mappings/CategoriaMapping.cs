@@ -46,7 +46,8 @@ public class CategoriaMapping : IEntityTypeConfiguration<Categoria>
             .HasColumnName("CTG_DATA_MODIFICACAO")
             .HasColumnOrder(5)
             .HasColumnType("datetime")
-            .HasComment("Data da Última Modificação da Categoria");
+            .HasComment("Data da Última Modificação da Categoria")
+            .IsRequired(false);
 
         builder.Property(c => c.UsuarioCriacao)
             .HasColumnName("CTG_USUARIO_CRIACAO")
@@ -60,7 +61,8 @@ public class CategoriaMapping : IEntityTypeConfiguration<Categoria>
             .HasColumnOrder(7)
             .HasMaxLength(50)
             .HasColumnType("varchar(50)")
-            .HasComment("Usuário Responsável pela Modificação da Categoria");
+            .HasComment("Usuário Responsável pela Modificação da Categoria")
+            .IsRequired(false);
 
         // Índices
         builder.HasIndex(c => c.Nome)

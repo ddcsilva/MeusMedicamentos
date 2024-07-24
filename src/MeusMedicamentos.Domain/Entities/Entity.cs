@@ -14,7 +14,7 @@ public abstract class Entity
     public DateTime DataCriacao { get; protected set; }
     public DateTime? DataModificacao { get; protected set; }
     public string UsuarioCriacao { get; protected set; } = string.Empty;
-    public string UsuarioModificacao { get; protected set; } = string.Empty;
+    public string? UsuarioModificacao { get; protected set; }
     public Status Status { get; protected set; }
 
     public void SetModificacao(string usuario)
