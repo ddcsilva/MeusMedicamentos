@@ -32,7 +32,7 @@ public class CategoriaMapping : IEntityTypeConfiguration<Categoria>
             .HasColumnName("CTG_STATUS")
             .HasColumnOrder(3)
             .IsRequired()
-            .HasColumnType("int")
+            .HasColumnType("bit")
             .HasComment("Status da Categoria");
 
         builder.Property(c => c.DataCriacao)
