@@ -1,3 +1,6 @@
+using MeusMedicamentos.Application.Interfaces;
+using MeusMedicamentos.Application.Mappings;
+using MeusMedicamentos.Application.Services;
 using MeusMedicamentos.Domain.Interfaces;
 using MeusMedicamentos.Infra.Data.Context;
 using MeusMedicamentos.Infra.Data.Repositories;
@@ -14,6 +17,7 @@ public static class DependencyInjection
         AdicionarContexto(services, configuration);
         AdicionarRepositorios(services);
         AdicionarUnitOfWork(services);
+        AdicionarServicos(services);
         AdicionarAutoMapper(services);
 
         return services;
@@ -40,8 +44,13 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
+    private static void AdicionarServicos(this IServiceCollection services)
+    {
+        services.AddScoped<ICategoriaService, CategoriaService>();
+    }
+
     private static void AdicionarAutoMapper(this IServiceCollection services)
     {
-        // Configuração do AutoMapper, se necessário
+        services.AddAutoMapper(typeof(AutoMapperProfile));
     }
 }
