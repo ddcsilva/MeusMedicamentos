@@ -1,4 +1,6 @@
+using MeusMedicamentos.Domain.Interfaces;
 using MeusMedicamentos.Infra.Data.Context;
+using MeusMedicamentos.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,21 +12,11 @@ public static class DependencyInjection
     public static IServiceCollection ResolverDependencias(this IServiceCollection services, IConfiguration configuration)
     {
         AdicionarContexto(services, configuration);
+        AdicionarRepositorios(services);
+        AdicionarUnitOfWork(services);
         AdicionarAutoMapper(services);
-        ResolverDependenciasRepository(services);
-        ResolverDependenciasServices(services);
 
         return services;
-    }
-
-    private static void ResolverDependenciasRepository(this IServiceCollection services)
-    {
-        // Adicionar os repositórios específicos
-    }
-
-    private static void ResolverDependenciasServices(this IServiceCollection services)
-    {
-        // Adicionar os serviços específicos
     }
 
     private static IServiceCollection AdicionarContexto(this IServiceCollection services, IConfiguration configuration)
@@ -35,6 +27,17 @@ public static class DependencyInjection
                 b => b.MigrationsAssembly("MeusMedicamentos.Infra.Data")));
 
         return services;
+    }
+
+    private static void AdicionarRepositorios(this IServiceCollection services)
+    {
+        services.AddScoped<ICategoriaRepository, CategoriaRepository>();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+    }
+
+    private static void AdicionarUnitOfWork(this IServiceCollection services)
+    {
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
     }
 
     private static void AdicionarAutoMapper(this IServiceCollection services)
