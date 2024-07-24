@@ -9,9 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Applicatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Domain", "src\MeusMedicamentos.Domain\MeusMedicamentos.Domain.csproj", "{8E60DFEE-B7DB-4F7A-A125-C17581E389B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Data.Infra", "src\MeusMedicamentos.Data.Infra\MeusMedicamentos.Data.Infra.csproj", "{C3C0CE8C-021A-4683-8B7C-4BF26B895C2C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Infra.Data", "src\MeusMedicamentos.Infra.Data\MeusMedicamentos.Infra.Data.csproj", "{C3C0CE8C-021A-4683-8B7C-4BF26B895C2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Data.IoC", "src\MeusMedicamentos.Data.IoC\MeusMedicamentos.Data.IoC.csproj", "{FF99D7F4-2F22-4347-A7AD-4644F8DF5B5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Infra.IoC", "src\MeusMedicamentos.Infra.IoC\MeusMedicamentos.Infra.IoC.csproj", "{FF99D7F4-2F22-4347-A7AD-4644F8DF5B5F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.API", "src\MeusMedicamentos.API\MeusMedicamentos.API.csproj", "{267E2FCD-0760-458D-913E-9BDFF0E523F5}"
 EndProject

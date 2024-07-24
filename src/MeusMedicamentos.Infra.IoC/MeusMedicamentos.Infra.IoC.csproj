@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\MeusMedicamentos.Application\MeusMedicamentos.Application.csproj" />
     <ProjectReference Include="..\MeusMedicamentos.Domain\MeusMedicamentos.Domain.csproj" />
+    <ProjectReference Include="..\MeusMedicamentos.Infra.Data\MeusMedicamentos.Infra.Data.csproj" />
   </ItemGroup>
 
 </Project>

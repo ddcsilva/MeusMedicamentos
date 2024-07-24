@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace MeusMedicamentos.Data.Infra.Configurations
+namespace MeusMedicamentos.Infra.Data.Configurations
 {
     public static class Convencoes
     {

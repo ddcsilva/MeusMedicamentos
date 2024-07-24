@@ -1,8 +1,8 @@
-using MeusMedicamentos.Data.Infra.Configurations;
+using MeusMedicamentos.Infra.Data.Configurations;
 using MeusMedicamentos.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace MeusMedicamentos.Data.Infra.Context;
+namespace MeusMedicamentos.Infra.Data.Context;
 
 public class MeusMedicamentosContext : DbContext
 {
