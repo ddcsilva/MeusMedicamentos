@@ -1,5 +1,5 @@
 using System.Net;
-using MeusMedicamentos.API.Models;
+using MeusMedicamentos.Shared;
 
 namespace MeusMedicamentos.API.Middlewares;
 
