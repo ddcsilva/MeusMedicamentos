@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeusMedicamentos.Domain\MeusMedicamentos.Domain.csproj" />
+    <ProjectReference Include="..\MeusMedicamentos.Shared\MeusMedicamentos.Shared.csproj" />
   </ItemGroup>
 
 </Project>

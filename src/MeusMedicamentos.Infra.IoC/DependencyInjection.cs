@@ -1,7 +1,10 @@
+using FluentValidation;
 using MeusMedicamentos.Application.Interfaces;
 using MeusMedicamentos.Application.Mappings;
 using MeusMedicamentos.Application.Services;
+using MeusMedicamentos.Domain.Entities;
 using MeusMedicamentos.Domain.Interfaces;
+using MeusMedicamentos.Domain.Validations;
 using MeusMedicamentos.Infra.Data.Context;
 using MeusMedicamentos.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +21,7 @@ public static class DependencyInjection
         AdicionarRepositorios(services);
         AdicionarUnitOfWork(services);
         AdicionarServicos(services);
+        AdicionarValidadores(services);
         AdicionarAutoMapper(services);
 
         return services;
@@ -47,6 +51,11 @@ public static class DependencyInjection
     private static void AdicionarServicos(this IServiceCollection services)
     {
         services.AddScoped<ICategoriaService, CategoriaService>();
+    }
+
+    private static void AdicionarValidadores(this IServiceCollection services)
+    {
+        services.AddTransient<IValidator<Categoria>, CategoriaValidator>();
     }
 
     private static void AdicionarAutoMapper(this IServiceCollection services)

@@ -1,16 +1,19 @@
+using MeusMedicamentos.API.Middlewares;
 using MeusMedicamentos.Infra.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Adiciona serviços ao contêiner.
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.ResolverDependencias(builder.Configuration);
 
-builder.Services.AddControllers(); // Adiciona suporte ao MVC, se necessário
+// Registra as dependências
+builder.Services.ResolverDependencias(builder.Configuration);
 
 var app = builder.Build();
 
+// Configura o pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -18,7 +21,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseAuthorization();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.MapControllers();
 
 app.Run();
