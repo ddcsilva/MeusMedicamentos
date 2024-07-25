@@ -28,7 +28,7 @@ namespace MeusMedicamentos.Application.Services
         {
             var categorias = await _categoriaRepository.ObterTodosAsync();
             var categoriaDTOs = _mapper.Map<IEnumerable<CategoriaDTO>>(categorias);
-            return new ApiResponse<IEnumerable<CategoriaDTO>>(categoriaDTOs);
+            return new ApiResponse<IEnumerable<CategoriaDTO>>(categoriaDTOs, 200);
         }
 
         public async Task<ApiResponse<CategoriaDTO>> ObterPorIdAsync(int id)
@@ -37,11 +37,11 @@ namespace MeusMedicamentos.Application.Services
             if (categoria == null)
             {
                 Notificar("Categoria não encontrada");
-                return new ApiResponse<CategoriaDTO>("Categoria não encontrada");
+                return new ApiResponse<CategoriaDTO>("Categoria não encontrada", 404);
             }
 
             var categoriaDTO = _mapper.Map<CategoriaDTO>(categoria);
-            return new ApiResponse<CategoriaDTO>(categoriaDTO);
+            return new ApiResponse<CategoriaDTO>(categoriaDTO, 200);
         }
 
         public async Task<ApiResponse<CategoriaDTO>> AdicionarAsync(CriarCategoriaDTO categoriaDTO)
@@ -52,14 +52,14 @@ namespace MeusMedicamentos.Application.Services
             if (existente.Any())
             {
                 Notificar("Já existe uma categoria com o mesmo nome.");
-                return new ApiResponse<CategoriaDTO>("Já existe uma categoria com o mesmo nome.");
+                return new ApiResponse<CategoriaDTO>("Já existe uma categoria com o mesmo nome.", 400);
             }
 
             var validationResult = await new CategoriaValidator().ValidateAsync(categoria);
             if (!validationResult.IsValid)
             {
                 Notificar(validationResult);
-                return new ApiResponse<CategoriaDTO>(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                return new ApiResponse<CategoriaDTO>(validationResult.Errors.Select(e => e.ErrorMessage).ToList(), 400);
             }
 
             await _categoriaRepository.AdicionarAsync(categoria);
@@ -67,20 +67,20 @@ namespace MeusMedicamentos.Application.Services
             if (!sucesso)
             {
                 Notificar("Erro ao salvar categoria.");
-                return new ApiResponse<CategoriaDTO>("Erro ao salvar categoria.");
+                return new ApiResponse<CategoriaDTO>("Erro ao salvar categoria.", 500);
             }
 
             var categoriaDtoRetorno = _mapper.Map<CategoriaDTO>(categoria);
-            return new ApiResponse<CategoriaDTO>(categoriaDtoRetorno);
+            return new ApiResponse<CategoriaDTO>(categoriaDtoRetorno, 201);
         }
 
-        public async Task<ApiResponse<string>> AtualizarAsync(EditarCategoriaDTO categoriaDTO)
+        public async Task<ApiResponse<CategoriaDTO>> AtualizarAsync(EditarCategoriaDTO categoriaDTO)
         {
             var categoria = await _categoriaRepository.ObterPorIdAsync(categoriaDTO.Id);
             if (categoria == null)
             {
                 Notificar("Categoria não encontrada");
-                return new ApiResponse<string>("Categoria não encontrada");
+                return new ApiResponse<CategoriaDTO>("Categoria não encontrada", 404);
             }
 
             _mapper.Map(categoriaDTO, categoria);
@@ -89,7 +89,7 @@ namespace MeusMedicamentos.Application.Services
             if (!validationResult.IsValid)
             {
                 Notificar(validationResult);
-                return new ApiResponse<string>(validationResult.Errors.Select(e => e.ErrorMessage).ToList());
+                return new ApiResponse<CategoriaDTO>(validationResult.Errors.Select(e => e.ErrorMessage).ToList(), 400);
             }
 
             await _categoriaRepository.AtualizarAsync(categoria);
@@ -97,19 +97,20 @@ namespace MeusMedicamentos.Application.Services
             if (!sucesso)
             {
                 Notificar("Erro ao atualizar categoria.");
-                return new ApiResponse<string>("Erro ao atualizar categoria.");
+                return new ApiResponse<CategoriaDTO>("Erro ao atualizar categoria.", 500);
             }
 
-            return new ApiResponse<string>("Categoria atualizada com sucesso");
+            var categoriaDtoRetorno = _mapper.Map<CategoriaDTO>(categoria);
+            return new ApiResponse<CategoriaDTO>(categoriaDtoRetorno, 200);
         }
 
-        public async Task<ApiResponse<string>> RemoverAsync(int id)
+        public async Task<ApiResponse<bool>> RemoverAsync(int id)
         {
             var categoria = await _categoriaRepository.ObterPorIdAsync(id);
             if (categoria == null)
             {
                 Notificar("Categoria não encontrada");
-                return new ApiResponse<string>("Categoria não encontrada");
+                return new ApiResponse<bool>("Categoria não encontrada", 404);
             }
 
             await _categoriaRepository.RemoverAsync(categoria);
@@ -117,10 +118,10 @@ namespace MeusMedicamentos.Application.Services
             if (!sucesso)
             {
                 Notificar("Erro ao remover categoria.");
-                return new ApiResponse<string>("Erro ao remover categoria.");
+                return new ApiResponse<bool>("Erro ao remover categoria.", 500);
             }
 
-            return new ApiResponse<string>("Categoria removida com sucesso");
+            return new ApiResponse<bool>(true, 204); // Retorna 204 No Content
         }
     }
 }

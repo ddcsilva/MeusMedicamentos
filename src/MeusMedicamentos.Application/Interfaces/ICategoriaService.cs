@@ -8,7 +8,7 @@ namespace MeusMedicamentos.Application.Interfaces
         Task<ApiResponse<IEnumerable<CategoriaDTO>>> ObterTodosAsync();
         Task<ApiResponse<CategoriaDTO>> ObterPorIdAsync(int id);
         Task<ApiResponse<CategoriaDTO>> AdicionarAsync(CriarCategoriaDTO categoriaDTO);
-        Task<ApiResponse<string>> AtualizarAsync(EditarCategoriaDTO categoriaDTO);
-        Task<ApiResponse<string>> RemoverAsync(int id);
+        Task<ApiResponse<CategoriaDTO>> AtualizarAsync(EditarCategoriaDTO categoriaDTO);
+        Task<ApiResponse<bool>> RemoverAsync(int id);
     }
 }

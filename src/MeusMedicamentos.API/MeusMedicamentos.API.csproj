@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MeusMedicamentos.Infra.IoC\MeusMedicamentos.Infra.IoC.csproj" />
-    <ProjectReference Include="..\MeusMedicamentos.Shared\MeusMedicamentos.Shared.csproj" />
   </ItemGroup>
 
 </Project>

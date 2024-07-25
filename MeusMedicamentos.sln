@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{90E3457F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Domain.Tests", "tests\MeusMedicamentos.Domain.Tests\MeusMedicamentos.Domain.Tests.csproj", "{A00425CE-D528-4F6D-A8AB-A32ED41C38FD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Shared", "src\MeusMedicamentos.Shared\MeusMedicamentos.Shared.csproj", "{F0CBEFC2-68B0-4FE7-B732-2BD6A6C48FCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -52,6 +54,10 @@ Global
 		{A00425CE-D528-4F6D-A8AB-A32ED41C38FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A00425CE-D528-4F6D-A8AB-A32ED41C38FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A00425CE-D528-4F6D-A8AB-A32ED41C38FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0CBEFC2-68B0-4FE7-B732-2BD6A6C48FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0CBEFC2-68B0-4FE7-B732-2BD6A6C48FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0CBEFC2-68B0-4FE7-B732-2BD6A6C48FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0CBEFC2-68B0-4FE7-B732-2BD6A6C48FCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2AC8E387-DA62-4F51-B5C3-193E0D363B50} = {54F2575E-C631-442B-B895-F01F84931E06}
@@ -60,5 +66,6 @@ Global
 		{FF99D7F4-2F22-4347-A7AD-4644F8DF5B5F} = {54F2575E-C631-442B-B895-F01F84931E06}
 		{267E2FCD-0760-458D-913E-9BDFF0E523F5} = {54F2575E-C631-442B-B895-F01F84931E06}
 		{A00425CE-D528-4F6D-A8AB-A32ED41C38FD} = {90E3457F-91A1-4702-AEAD-F9519C2CD1F3}
+		{F0CBEFC2-68B0-4FE7-B732-2BD6A6C48FCD} = {54F2575E-C631-442B-B895-F01F84931E06}
 	EndGlobalSection
 EndGlobal

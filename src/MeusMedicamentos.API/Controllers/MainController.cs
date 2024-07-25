@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using MeusMedicamentos.Domain.Notifications;
+using MeusMedicamentos.Shared;
 
 namespace MeusMedicamentos.API.Controllers
 {
@@ -19,28 +20,30 @@ namespace MeusMedicamentos.API.Controllers
             return !_notificadorErros.TemNotificacoes();
         }
 
-        protected ActionResult CustomResponse(object result = null)
+        protected ActionResult CustomResponse<T>(ApiResponse<T> response)
         {
-            if (OperacaoValida())
+            if (response.Success)
             {
-                return Ok(new
+                return StatusCode(response.StatusCode, new
                 {
-                    success = true,
-                    data = result
+                    success = response.Success,
+                    data = response.Data,
+                    statusCode = response.StatusCode
                 });
             }
 
-            return BadRequest(new
+            return StatusCode(response.StatusCode, new
             {
-                success = false,
-                errors = _notificadorErros.ObterNotificacoes().Select(n => n.Mensagem)
+                success = response.Success,
+                errors = response.Errors,
+                statusCode = response.StatusCode
             });
         }
 
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
         {
             if (!modelState.IsValid) NotificarErroModelInvalida(modelState);
-            return CustomResponse();
+            return CustomResponse(new ApiResponse<string>(400));
         }
 
         protected void NotificarErroModelInvalida(ModelStateDictionary modelState)

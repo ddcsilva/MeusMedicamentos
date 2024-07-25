@@ -21,14 +21,14 @@ namespace MeusMedicamentos.API.Controllers
         public async Task<IActionResult> ObterTodos()
         {
             var response = await _categoriaService.ObterTodosAsync();
-            return CustomResponse(response.Data);
+            return CustomResponse(response);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterPorId(int id)
         {
             var response = await _categoriaService.ObterPorIdAsync(id);
-            return CustomResponse(response.Data);
+            return CustomResponse(response);
         }
 
         [HttpPost]
@@ -37,7 +37,7 @@ namespace MeusMedicamentos.API.Controllers
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var response = await _categoriaService.AdicionarAsync(categoriaDTO);
-            return CustomResponse(response.Data);
+            return CustomResponse(response);
         }
 
         [HttpPut("{id}")]
@@ -46,20 +46,25 @@ namespace MeusMedicamentos.API.Controllers
             if (id != categoriaDTO.Id)
             {
                 NotificarErro("Erro ao atualizar a categoria: Id da requisição difere do Id do objeto");
-                return CustomResponse(new ApiResponse<string>("Erro ao atualizar a categoria: Id da requisição difere do Id do objeto"));
+                return CustomResponse(new ApiResponse<string>("Erro ao atualizar a categoria: Id da requisição difere do Id do objeto", 400));
             }
 
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var response = await _categoriaService.AtualizarAsync(categoriaDTO);
-            return CustomResponse(response.Data);
+            return CustomResponse(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(int id)
         {
             var response = await _categoriaService.RemoverAsync(id);
-            return CustomResponse(response.Data);
+            if (!response.Success)
+            {
+                return CustomResponse(response);
+            }
+
+            return NoContent();
         }
     }
 }
