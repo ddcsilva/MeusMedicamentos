@@ -55,11 +55,6 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         return Task.CompletedTask;
     }
 
-    public async Task<bool> SalvarAlteracoesAsync()
-    {
-        return await _context.SaveChangesAsync() > 0;
-    }
-
     public void Dispose()
     {
         _context.Dispose();
