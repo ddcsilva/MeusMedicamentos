@@ -2,15 +2,15 @@ using AutoMapper;
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Domain.Entities;
 
-namespace MeusMedicamentos.Application.Mappings;
-
-public class AutoMapperProfile : Profile
+namespace MeusMedicamentos.Application.Mappings
 {
-    public AutoMapperProfile()
+    public class AutoMapperProfile : Profile
     {
-        CreateMap<Categoria, CategoriaDTO>().ReverseMap();
-        CreateMap<CriarCategoriaDTO, Categoria>();
-        CreateMap<EditarCategoriaDTO, Categoria>();
+        public AutoMapperProfile()
+        {
+            CreateMap<Categoria, CategoriaDTO>().ReverseMap();
+            CreateMap<CriarCategoriaDTO, Categoria>();
+            CreateMap<EditarCategoriaDTO, Categoria>();
+        }
     }
 }
-

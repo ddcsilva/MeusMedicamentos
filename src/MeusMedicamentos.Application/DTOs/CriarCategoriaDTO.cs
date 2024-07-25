@@ -1,9 +1,10 @@
 using MeusMedicamentos.Domain.Enums;
 
-namespace MeusMedicamentos.Application.DTOs;
-
-public class CriarCategoriaDTO
+namespace MeusMedicamentos.Application.DTOs
 {
-    public string Nome { get; set; } = string.Empty;
-    public Status Status { get; set; }
+    public class CriarCategoriaDTO
+    {
+        public string Nome { get; set; } = string.Empty;
+        public Status Status { get; set; }
+    }
 }

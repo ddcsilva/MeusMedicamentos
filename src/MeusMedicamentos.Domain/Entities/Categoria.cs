@@ -1,11 +1,12 @@
-namespace MeusMedicamentos.Domain.Entities;
-
-public sealed class Categoria : Entity
+namespace MeusMedicamentos.Domain.Entities
 {
-    public Categoria(string nome)
+    public sealed class Categoria : Entity
     {
-        Nome = nome;
-    }
+        public Categoria(string nome)
+        {
+            Nome = nome;
+        }
 
-    public string Nome { get; set; } = string.Empty;
+        public string Nome { get; set; } = string.Empty;
+    }
 }
