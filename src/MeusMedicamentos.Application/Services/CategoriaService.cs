@@ -3,6 +3,7 @@ using FluentValidation;
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using MeusMedicamentos.Domain.Entities;
+using MeusMedicamentos.Domain.Enums;
 using MeusMedicamentos.Domain.Interfaces;
 using MeusMedicamentos.Domain.Notifications;
 using MeusMedicamentos.Domain.Validations;
@@ -121,7 +122,7 @@ namespace MeusMedicamentos.Application.Services
                 return new ApiResponse<bool>("Erro ao remover categoria.", 500);
             }
 
-            return new ApiResponse<bool>(true, 204); // Retorna 204 No Content
+            return new ApiResponse<bool>(true, 204);
         }
     }
 }

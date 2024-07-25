@@ -17,7 +17,7 @@ public static class ModelBuilderExtensions
         {
             Id = 1,
             Nome = "Analgésicos",
-            Status = Status.Ativo,
+            Status = EStatus.Ativo,
             DataCriacao = DateTime.UtcNow,
             UsuarioCriacao = "Sistema"
         });
@@ -26,7 +26,7 @@ public static class ModelBuilderExtensions
         {
             Id = 2,
             Nome = "Antibióticos",
-            Status = Status.Ativo,
+            Status = EStatus.Ativo,
             DataCriacao = DateTime.UtcNow,
             UsuarioCriacao = "Sistema"
         });
@@ -35,7 +35,7 @@ public static class ModelBuilderExtensions
         {
             Id = 3,
             Nome = "Anti-inflamatórios",
-            Status = Status.Ativo,
+            Status = EStatus.Ativo,
             DataCriacao = DateTime.UtcNow,
             UsuarioCriacao = "Sistema"
         });
@@ -44,7 +44,7 @@ public static class ModelBuilderExtensions
         {
             Id = 4,
             Nome = "Antipiréticos",
-            Status = Status.Inativo,
+            Status = EStatus.Inativo,
             DataCriacao = DateTime.UtcNow,
             UsuarioCriacao = "Sistema"
         });
@@ -53,7 +53,7 @@ public static class ModelBuilderExtensions
         {
             Id = 5,
             Nome = "Antissépticos",
-            Status = Status.Inativo,
+            Status = EStatus.Inativo,
             DataCriacao = DateTime.UtcNow,
             UsuarioCriacao = "Sistema"
         });
@@ -62,7 +62,7 @@ public static class ModelBuilderExtensions
         {
             Id = 6,
             Nome = "Broncodilatadores",
-            Status = Status.Ativo,
+            Status = EStatus.Ativo,
             DataCriacao = DateTime.UtcNow,
             UsuarioCriacao = "Sistema"
         });

@@ -6,6 +6,6 @@ namespace MeusMedicamentos.Application.DTOs
     {
         public int Id { get; set; }
         public string Nome { get; set; } = string.Empty;
-        public Status Status { get; set; }
+        public EStatus Status { get; set; }
     }
 }

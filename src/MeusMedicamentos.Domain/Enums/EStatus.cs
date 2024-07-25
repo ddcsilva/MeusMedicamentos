@@ -1,6 +1,6 @@
 namespace MeusMedicamentos.Domain.Enums;
 
-public enum Status
+public enum EStatus
 {
     Inativo = 0,
     Ativo = 1
