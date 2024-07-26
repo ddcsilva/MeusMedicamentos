@@ -13,8 +13,8 @@ namespace MeusMedicamentos.Domain.Entities
         public int Id { get; protected set; }
         public DateTime DataCriacao { get; protected set; }
         public DateTime? DataModificacao { get; protected set; }
-        public string UsuarioCriacao { get; protected set; } = string.Empty;
-        public string? UsuarioModificacao { get; protected set; }
+        public string UsuarioCriacaoId { get; protected set; } = string.Empty;
+        public string? UsuarioModificacaoId { get; protected set; }
         public EStatus Status { get; protected set; }
 
         public void SetStatus(EStatus status)
@@ -22,9 +22,14 @@ namespace MeusMedicamentos.Domain.Entities
             Status = status;
         }
 
-        public void SetUsuario(string usuario)
+        public void SetUsuarioCriacaoId(string usuarioId)
         {
-            UsuarioCriacao = usuario;
+            UsuarioCriacaoId = usuarioId;
+        }
+
+        public void SetUsuarioModificacaoId(string usuarioId)
+        {
+            UsuarioModificacaoId = usuarioId;
         }
 
         public void SetDataModificacao()

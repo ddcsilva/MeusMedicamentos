@@ -11,6 +11,7 @@ using MeusMedicamentos.Infra.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 
 namespace MeusMedicamentos.Infra.IoC
 {
@@ -19,6 +20,7 @@ namespace MeusMedicamentos.Infra.IoC
         public static IServiceCollection ResolverDependencias(this IServiceCollection services, IConfiguration configuration)
         {
             AdicionarContexto(services, configuration);
+            AdicionarIdentity(services);
             AdicionarRepositorios(services);
             AdicionarUnitOfWork(services);
             AdicionarServicos(services);
@@ -38,6 +40,13 @@ namespace MeusMedicamentos.Infra.IoC
             return services;
         }
 
+        private static void AdicionarIdentity(this IServiceCollection services)
+        {
+            services.AddIdentity<Usuario, IdentityRole>()
+                .AddEntityFrameworkStores<MeusMedicamentosContext>()
+                .AddDefaultTokenProviders();
+        }
+
         private static void AdicionarRepositorios(this IServiceCollection services)
         {
             services.AddScoped<ICategoriaRepository, CategoriaRepository>();
@@ -53,6 +62,7 @@ namespace MeusMedicamentos.Infra.IoC
         {
             services.AddScoped<ICategoriaService, CategoriaService>();
             services.AddScoped<INotificadorErros, NotificadorErros>();
+            services.AddScoped<IAutenticacaoService, AutenticacaoService>();
         }
 
         private static void AdicionarValidadores(this IServiceCollection services)

@@ -46,19 +46,19 @@ namespace MeusMedicamentos.Infra.Data.Mappings
                 .HasComment("Data da Última Modificação da Categoria")
                 .IsRequired(false);
 
-            builder.Property(c => c.UsuarioCriacao)
-                .HasColumnName("CTG_USUARIO_CRIACAO")
+            builder.Property(c => c.UsuarioCriacaoId)
+                .HasColumnName("CTG_USUARIO_CRIACAO_ID")
                 .HasColumnOrder(6)
                 .HasMaxLength(50)
                 .HasColumnType("varchar(50)")
-                .HasComment("Usuário Responsável pela Criação da Categoria");
+                .HasComment("ID do Usuário Responsável pela Criação da Categoria");
 
-            builder.Property(c => c.UsuarioModificacao)
-                .HasColumnName("CTG_USUARIO_MODIFICACAO")
+            builder.Property(c => c.UsuarioModificacaoId)
+                .HasColumnName("CTG_USUARIO_MODIFICACAO_ID")
                 .HasColumnOrder(7)
                 .HasMaxLength(50)
                 .HasColumnType("varchar(50)")
-                .HasComment("Usuário Responsável pela Modificação da Categoria")
+                .HasComment("ID do Usuário Responsável pela Modificação da Categoria")
                 .IsRequired(false);
 
             builder.HasIndex(c => c.Nome)

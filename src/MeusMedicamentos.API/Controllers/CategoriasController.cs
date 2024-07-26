@@ -2,10 +2,12 @@ using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using MeusMedicamentos.Domain.Notifications;
 using MeusMedicamentos.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeusMedicamentos.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class CategoriasController : MainController
     {

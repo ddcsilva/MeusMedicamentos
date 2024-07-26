@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeusMedicamentos.Infra.Data.Configurations
@@ -8,22 +9,31 @@ namespace MeusMedicamentos.Infra.Data.Configurations
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                modelBuilder.Entity(entityType.ClrType).ToTable($"TB_{entityType.ClrType.Name.ToUpper()}");
-
-                var chavePrimaria = entityType.FindPrimaryKey();
-                if (chavePrimaria != null)
+                if (entityType.ClrType.Name != nameof(IdentityUser) &&
+                    entityType.ClrType.Name != nameof(IdentityRole) &&
+                    entityType.ClrType.Name != nameof(IdentityUserRole<string>) &&
+                    entityType.ClrType.Name != nameof(IdentityUserClaim<string>) &&
+                    entityType.ClrType.Name != nameof(IdentityUserLogin<string>) &&
+                    entityType.ClrType.Name != nameof(IdentityRoleClaim<string>) &&
+                    entityType.ClrType.Name != nameof(IdentityUserToken<string>))
                 {
-                    chavePrimaria.SetName($"PK_{entityType.GetTableName()}");
-                }
+                    modelBuilder.Entity(entityType.ClrType).ToTable($"TB_{entityType.ClrType.Name.ToUpper()}");
 
-                foreach (var foreignKey in entityType.GetForeignKeys())
-                {
-                    foreignKey.SetConstraintName($"FK_{entityType.GetTableName()}_{foreignKey.PrincipalEntityType.GetTableName()}");
-                }
+                    var chavePrimaria = entityType.FindPrimaryKey();
+                    if (chavePrimaria != null)
+                    {
+                        chavePrimaria.SetName($"PK_{entityType.GetTableName()}");
+                    }
 
-                foreach (var index in entityType.GetIndexes())
-                {
-                    index.SetDatabaseName($"IX_{entityType.GetTableName()}_{string.Join("_", index.Properties.Select(p => p.Name))}");
+                    foreach (var foreignKey in entityType.GetForeignKeys())
+                    {
+                        foreignKey.SetConstraintName($"FK_{entityType.GetTableName()}_{foreignKey.PrincipalEntityType.GetTableName()}");
+                    }
+
+                    foreach (var index in entityType.GetIndexes())
+                    {
+                        index.SetDatabaseName($"IX_{entityType.GetTableName()}_{string.Join("_", index.Properties.Select(p => p.Name))}");
+                    }
                 }
             }
         }
