@@ -10,13 +10,13 @@
     <a href="@Url.Action("Create")" class="btn btn-primary">Criar Nova Categoria</a>
 </p>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>ID</th>
             <th>Nome</th>
             <th>Status</th>
-            <th></th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -27,8 +27,8 @@
                 <td>@categoria.Nome</td>
                 <td>@categoria.Status</td>
                 <td>
-                    <a href="@Url.Action("Edit", new { id = categoria.Id })" class="btn btn-warning">Editar</a>
-                    <a href="@Url.Action("Delete", new { id = categoria.Id })" class="btn btn-danger">Excluir</a>
+                    <a href="@Url.Action("Edit", new { id = categoria.Id })" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="@Url.Action("Delete", new { id = categoria.Id })" class="btn btn-danger btn-sm">Excluir</a>
                 </td>
             </tr>
         }
