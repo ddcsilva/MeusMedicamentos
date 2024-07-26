@@ -40,13 +40,10 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// Configurar a sessão
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
+builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
+    options.LoginPath = "/Account/Login"; // Defina o caminho para a página de login
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Defina o caminho para a página de acesso negado, se necessário
 });
 
 var app = builder.Build();
@@ -67,13 +64,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.UseSession(); // Adicione a configuração de sessão aqui
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Account}/{action=Login}/{id?}"); // Defina o controller e action padrão para login
 
 app.Run();

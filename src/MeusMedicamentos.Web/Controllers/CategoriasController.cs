@@ -1,11 +1,11 @@
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MeusMedicamentos.Web.Controllers
 {
+    [Authorize] // Adicione esta linha para exigir autorização
     public class CategoriasController : Controller
     {
         private readonly ICategoriaService _categoriaService;
