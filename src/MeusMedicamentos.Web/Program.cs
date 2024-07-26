@@ -1,16 +1,62 @@
+using System.Text;
+using MeusMedicamentos.Web;
 using MeusMedicamentos.Infra.IoC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using MeusMedicamentos.Infra.Data.Context;
+using MeusMedicamentos.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adicionar serviços ao contêiner
+// Adiciona serviços ao contêiner.
 builder.Services.AddControllersWithViews();
 
+// Carrega os User Secrets
+builder.Configuration.AddUserSecrets<Program>();
+
+// Registra as dependências e Identity
 builder.Services.ResolverDependencias(builder.Configuration);
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
+    };
+});
+
+builder.Services.AddAuthorization();
+
+// Configurar a sessão
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
-// Configurar o pipeline HTTP
-if (!app.Environment.IsDevelopment())
+// Configura o pipeline HTTP
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
@@ -18,7 +64,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
+app.UseSession(); // Adicione a configuração de sessão aqui
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

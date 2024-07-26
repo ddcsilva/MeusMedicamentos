@@ -1,7 +1,6 @@
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace MeusMedicamentos.API.Controllers
 {
