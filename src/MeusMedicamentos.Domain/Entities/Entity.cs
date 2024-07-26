@@ -17,15 +17,19 @@ namespace MeusMedicamentos.Domain.Entities
         public string? UsuarioModificacao { get; protected set; }
         public EStatus Status { get; protected set; }
 
-        public void SetModificacao(string usuario)
-        {
-            DataModificacao = DateTime.UtcNow;
-            UsuarioModificacao = usuario;
-        }
-
         public void SetStatus(EStatus status)
         {
             Status = status;
+        }
+
+        public void SetUsuario(string usuario)
+        {
+            UsuarioCriacao = usuario;
+        }
+
+        public void SetDataModificacao()
+        {
+            DataModificacao = DateTime.UtcNow;
         }
     }
 }

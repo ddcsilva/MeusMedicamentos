@@ -1,5 +1,3 @@
-using MeusMedicamentos.Domain.Enums;
-
 namespace MeusMedicamentos.Domain.Entities
 {
     public sealed class Categoria : Entity

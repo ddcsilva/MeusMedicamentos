@@ -47,6 +47,7 @@ namespace MeusMedicamentos.Application.Services
         public async Task<ApiResponse<CategoriaDTO>> AdicionarAsync(CriarCategoriaDTO categoriaDTO)
         {
             var categoria = _mapper.Map<Categoria>(categoriaDTO);
+            categoria.SetUsuario("Sistema");
 
             var existente = await _categoriaRepository.ObterPorCondicaoAsync(c => c.Nome == categoria.Nome);
             if (existente.Any())
