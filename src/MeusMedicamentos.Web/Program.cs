@@ -1,7 +1,6 @@
 using System.Text;
 using MeusMedicamentos.Infra.IoC;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +16,15 @@ builder.Services.ResolverDependencias(builder.Configuration);
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
-// Adiciona autenticação baseada em JWT e Cookies
+var jwtSecret = jwtSettings["Secret"];
+var jwtIssuer = jwtSettings["Issuer"];
+var jwtAudience = jwtSettings["Audience"];
+
+if (string.IsNullOrEmpty(jwtSecret) || string.IsNullOrEmpty(jwtIssuer) || string.IsNullOrEmpty(jwtAudience))
+{
+    throw new InvalidOperationException("JWT settings are not configured properly.");
+}
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -25,8 +32,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddCookie(options =>
 {
-    options.LoginPath = "/Autenticacao/Login"; // Caminho para a página de login
-    options.AccessDeniedPath = "/Autenticacao/AccessDenied"; // Caminho para a página de acesso negado
+    options.LoginPath = "/Autenticacao/Login";
+    options.AccessDeniedPath = "/Autenticacao/AccessDenied";
 })
 .AddJwtBearer(options =>
 {
@@ -36,9 +43,9 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtSettings["Issuer"],
-        ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
+        ValidIssuer = jwtIssuer,
+        ValidAudience = jwtAudience,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
     };
 });
 
