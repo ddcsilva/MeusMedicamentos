@@ -1,6 +1,7 @@
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeusMedicamentos.Web.Controllers
 {
@@ -35,14 +36,20 @@ namespace MeusMedicamentos.Web.Controllers
                 return View(loginDTO);
             }
 
+            // Armazena o token na sessão
             HttpContext.Session.SetString("JWToken", token);
+            // Armazena o token em um cookie
+            Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
+
             return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Logout()
         {
             HttpContext.Session.Remove("JWToken");
+            Response.Cookies.Delete("JWToken");
             return RedirectToAction("Login", "Autenticacao");
         }
     }

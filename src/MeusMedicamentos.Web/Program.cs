@@ -1,11 +1,7 @@
 using System.Text;
-using MeusMedicamentos.Web;
 using MeusMedicamentos.Infra.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using MeusMedicamentos.Infra.Data.Context;
-using MeusMedicamentos.Domain.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,14 +32,20 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
     };
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/Autenticacao/Login"; // Caminho para a página de login
+    options.AccessDeniedPath = "/Autenticacao/AcessoNegado"; // Caminho para a página de acesso negado, se necessário
 });
 
 builder.Services.AddAuthorization();
 
-builder.Services.ConfigureApplicationCookie(options =>
+builder.Services.AddSession(options =>
 {
-    options.LoginPath = "/Account/Login"; // Defina o caminho para a página de login
-    options.AccessDeniedPath = "/Account/AccessDenied"; // Defina o caminho para a página de acesso negado, se necessário
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 var app = builder.Build();
@@ -64,11 +66,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseSession();
+app.UseJwtTokenMiddleware();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}"); // Defina o controller e action padrão para login
+    pattern: "{controller=Autenticacao}/{action=Login}/{id?}");
 
 app.Run();
