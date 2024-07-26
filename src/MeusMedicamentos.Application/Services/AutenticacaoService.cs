@@ -23,7 +23,7 @@ namespace MeusMedicamentos.Application.Services
             _configuration = configuration;
         }
 
-        public async Task<string> AutenticarAsync(string usuario, string senha)
+        public async Task<string?> AutenticarAsync(string usuario, string senha)
         {
             // Valida as credenciais do usuário
             var user = await _userManager.FindByNameAsync(usuario);
@@ -34,18 +34,28 @@ namespace MeusMedicamentos.Application.Services
                 {
                     // Gerar o token JWT
                     var jwtSettings = _configuration.GetSection("JwtSettings");
+                    var secret = jwtSettings["Secret"];
+                    var issuer = jwtSettings["Issuer"];
+                    var audience = jwtSettings["Audience"];
+                    var expiryMinutesStr = jwtSettings["ExpiryMinutes"];
+
+                    if (string.IsNullOrEmpty(secret) || string.IsNullOrEmpty(issuer) || string.IsNullOrEmpty(audience) || !int.TryParse(expiryMinutesStr, out var expiryMinutes))
+                    {
+                        throw new InvalidOperationException("JWT settings are not configured properly.");
+                    }
+
                     var tokenHandler = new JwtSecurityTokenHandler();
-                    var key = Encoding.UTF8.GetBytes(jwtSettings["Secret"]);
+                    var key = Encoding.UTF8.GetBytes(secret);
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(new[]
                         {
-                            new Claim(ClaimTypes.Name, user.UserName),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id)
+                            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id ?? string.Empty)
                         }),
-                        Expires = DateTime.UtcNow.AddMinutes(Convert.ToInt32(jwtSettings["ExpiryMinutes"])),
-                        Issuer = jwtSettings["Issuer"],
-                        Audience = jwtSettings["Audience"],
+                        Expires = DateTime.UtcNow.AddMinutes(expiryMinutes),
+                        Issuer = issuer,
+                        Audience = audience,
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                     };
                     var token = tokenHandler.CreateToken(tokenDescriptor);
