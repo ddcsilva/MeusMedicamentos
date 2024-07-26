@@ -37,9 +37,11 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Email = "admin@meusmedicamentos.com",
                 NormalizedEmail = "ADMIN@MEUSMEDICAMENTOS.COM",
                 EmailConfirmed = true,
-                Nome = "Administrador do Sistema",
-                PasswordHash = hasher.HashPassword(null, "Admin@123")
+                Nome = "Administrador do Sistema"
             };
+
+            // Hash da senha do usuário administrador
+            adminUser.PasswordHash = hasher.HashPassword(adminUser, "Admin@123");
 
             modelBuilder.Entity<Usuario>().HasData(adminUser);
 
