@@ -2,10 +2,7 @@ using System.Text;
 using MeusMedicamentos.API.Middlewares;
 using MeusMedicamentos.Infra.IoC;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using MeusMedicamentos.Infra.Data.Context;
-using MeusMedicamentos.Domain.Entities;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -49,6 +46,13 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Services.ResolverDependencias(builder.Configuration);
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+var jwtSecret = jwtSettings["Secret"];
+if (string.IsNullOrEmpty(jwtSecret))
+{
+    throw new InvalidOperationException("JWT Secret is not configured properly.");
+}
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,7 +68,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret))
     };
 });
 
@@ -72,7 +76,6 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configura o pipeline HTTP
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
