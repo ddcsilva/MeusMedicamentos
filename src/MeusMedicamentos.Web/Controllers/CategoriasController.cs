@@ -1,6 +1,8 @@
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MeusMedicamentos.Web.Controllers
 {
@@ -61,12 +63,11 @@ namespace MeusMedicamentos.Web.Controllers
             var response = await _categoriaService.ObterPorIdAsync(id);
             if (response.Success)
             {
-                var categoriaDTO = new EditarCategoriaDTO
-                {
-                    Id = response.Data.Id,
-                    Nome = response.Data.Nome,
-                    Status = response.Data.Status
-                };
+                var categoriaDTO = new EditarCategoriaDTO(
+                    response.Data.Id,
+                    response.Data.Nome,
+                    response.Data.Status
+                );
                 return View(categoriaDTO);
             }
             return RedirectToAction(nameof(Index));

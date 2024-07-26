@@ -3,7 +3,6 @@ using FluentValidation;
 using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using MeusMedicamentos.Domain.Entities;
-using MeusMedicamentos.Domain.Enums;
 using MeusMedicamentos.Domain.Interfaces;
 using MeusMedicamentos.Domain.Notifications;
 using MeusMedicamentos.Domain.Validations;
