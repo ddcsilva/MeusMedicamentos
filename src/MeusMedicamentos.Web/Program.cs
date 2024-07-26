@@ -1,16 +1,13 @@
 using System.Text;
 using MeusMedicamentos.Infra.IoC;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona serviços ao contêiner.
-builder.Services.AddControllersWithViews(options =>
-{
-    options.Filters.Add(new GlobalExceptionFilter());
-});
-
+builder.Services.AddControllersWithViews();
 
 // Carrega os User Secrets
 builder.Configuration.AddUserSecrets<Program>();
@@ -19,10 +16,17 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Services.ResolverDependencias(builder.Configuration);
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+// Adiciona autenticação baseada em JWT e Cookies
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/Autenticacao/Login"; // Caminho para a página de login
+    options.AccessDeniedPath = "/Autenticacao/AccessDenied"; // Caminho para a página de acesso negado
 })
 .AddJwtBearer(options =>
 {
@@ -35,16 +39,6 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = jwtSettings["Issuer"],
         ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]))
-    };
-})
-.AddCookie(options =>
-{
-    options.LoginPath = "/Autenticacao/Login"; // Caminho para a página de login
-    options.AccessDeniedPath = "/Autenticacao/AccessDenied"; // Caminho para a página de acesso negado
-    options.Events.OnRedirectToLogin = context =>
-    {
-        context.Response.Redirect(context.RedirectUri);
-        return Task.CompletedTask;
     };
 });
 
@@ -77,8 +71,6 @@ app.UseRouting();
 
 app.UseSession();
 
-app.UseJwtTokenMiddleware(); // Adicione esta linha para usar o middleware personalizado
-
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -87,4 +79,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-
