@@ -6,7 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 var builder = WebApplication.CreateBuilder(args);
 
 // Adiciona serviços ao contêiner.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new GlobalExceptionFilter());
+});
+
 
 // Carrega os User Secrets
 builder.Configuration.AddUserSecrets<Program>();
@@ -37,6 +41,11 @@ builder.Services.AddAuthentication(options =>
 {
     options.LoginPath = "/Autenticacao/Login"; // Caminho para a página de login
     options.AccessDeniedPath = "/Autenticacao/AccessDenied"; // Caminho para a página de acesso negado
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.Redirect(context.RedirectUri);
+        return Task.CompletedTask;
+    };
 });
 
 builder.Services.AddAuthorization();
@@ -75,7 +84,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Autenticacao}/{action=Login}/{id?}"); // Redirecionando para a página de login se não autenticado
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
 
