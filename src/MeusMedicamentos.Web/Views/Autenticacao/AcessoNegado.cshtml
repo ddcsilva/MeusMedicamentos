@@ -2,12 +2,15 @@
     ViewBag.Title = "Acesso Negado";
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2 class="text-danger">Acesso Negado</h2>
-            <p>Você não tem permissão para acessar esta página.</p>
-            <a href="@Url.Action("Login", "Autenticacao")" class="btn btn-primary">Voltar para o Login</a>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-danger text-center">
+                <h4 class="alert-heading">Acesso Negado</h4>
+                <p>Você não tem permissão para acessar esta página.</p>
+                <hr>
+                <a href="@Url.Action("Login", "Autenticacao")" class="btn btn-primary">Voltar para o Login</a>
+            </div>
         </div>
     </div>
 </div>

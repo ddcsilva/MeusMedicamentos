@@ -67,6 +67,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();
+
 app.UseJwtTokenMiddleware(); // Adicione esta linha para usar o middleware personalizado
 
 app.UseAuthentication();
@@ -74,6 +75,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"); // Definindo o controller e action padrão
+    pattern: "{controller=Autenticacao}/{action=Login}/{id?}"); // Redirecionando para a página de login se não autenticado
 
 app.Run();
+
