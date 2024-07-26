@@ -1,29 +1,32 @@
-public class JwtTokenMiddleware
+namespace MeusMedicamentos.Web.Middlewares
 {
-    private readonly RequestDelegate _next;
-
-    public JwtTokenMiddleware(RequestDelegate next)
+    public class JwtTokenMiddleware
     {
-        _next = next;
-    }
+        private readonly RequestDelegate _next;
 
-    public async Task InvokeAsync(HttpContext context)
-    {
-        var token = context.Session.GetString("JWToken");
-
-        if (!string.IsNullOrEmpty(token))
+        public JwtTokenMiddleware(RequestDelegate next)
         {
-            context.Request.Headers.Add("Authorization", $"Bearer {token}");
+            _next = next;
         }
 
-        await _next(context);
-    }
-}
+        public async Task InvokeAsync(HttpContext context)
+        {
+            var token = context.Session.GetString("JWToken");
 
-public static class JwtTokenMiddlewareExtensions
-{
-    public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder builder)
+            if (!string.IsNullOrEmpty(token))
+            {
+                context.Request.Headers["Authorization"] = $"Bearer {token}";
+            }
+
+            await _next(context);
+        }
+    }
+
+    public static class JwtTokenMiddlewareExtensions
     {
-        return builder.UseMiddleware<JwtTokenMiddleware>();
+        public static IApplicationBuilder UseJwtTokenMiddleware(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<JwtTokenMiddleware>();
+        }
     }
 }
