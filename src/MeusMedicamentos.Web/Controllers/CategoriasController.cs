@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MeusMedicamentos.Web.Controllers
 {
-    [Authorize] // Adicione esta linha para exigir autorização
+    [Authorize]
     public class CategoriasController : Controller
     {
         private readonly ICategoriaService _categoriaService;
@@ -15,7 +15,6 @@ namespace MeusMedicamentos.Web.Controllers
             _categoriaService = categoriaService;
         }
 
-        // Listar categorias
         public async Task<IActionResult> Index()
         {
             var response = await _categoriaService.ObterTodosAsync();
@@ -25,18 +24,15 @@ namespace MeusMedicamentos.Web.Controllers
             }
             else
             {
-                // Tratar erros conforme necessário
                 return View(new List<CategoriaDTO>());
             }
         }
 
-        // Exibir formulário de criação
         public IActionResult Create()
         {
             return View();
         }
 
-        // Processar formulário de criação
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CriarCategoriaDTO categoriaDTO)
@@ -50,18 +46,20 @@ namespace MeusMedicamentos.Web.Controllers
                 }
                 else
                 {
-                    // Tratar erros conforme necessário
-                    ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault());
+                    var firstError = response.Errors?.FirstOrDefault();
+                    if (firstError != null)
+                    {
+                        ModelState.AddModelError(string.Empty, firstError);
+                    }
                 }
             }
             return View(categoriaDTO);
         }
 
-        // Exibir formulário de edição
         public async Task<IActionResult> Edit(int id)
         {
             var response = await _categoriaService.ObterPorIdAsync(id);
-            if (response.Success)
+            if (response.Success && response.Data != null)
             {
                 var categoriaDTO = new EditarCategoriaDTO(
                     response.Data.Id,
@@ -73,7 +71,6 @@ namespace MeusMedicamentos.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Processar formulário de edição
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditarCategoriaDTO categoriaDTO)
@@ -87,25 +84,26 @@ namespace MeusMedicamentos.Web.Controllers
                 }
                 else
                 {
-                    // Tratar erros conforme necessário
-                    ModelState.AddModelError(string.Empty, response.Errors.FirstOrDefault());
+                    var firstError = response.Errors?.FirstOrDefault();
+                    if (firstError != null)
+                    {
+                        ModelState.AddModelError(string.Empty, firstError);
+                    }
                 }
             }
             return View(categoriaDTO);
         }
 
-        // Exibir formulário de exclusão
         public async Task<IActionResult> Delete(int id)
         {
             var response = await _categoriaService.ObterPorIdAsync(id);
-            if (response.Success)
+            if (response.Success && response.Data != null)
             {
                 return View(response.Data);
             }
             return RedirectToAction(nameof(Index));
         }
 
-        // Processar formulário de exclusão
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -115,7 +113,6 @@ namespace MeusMedicamentos.Web.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            // Tratar erros conforme necessário
             return RedirectToAction(nameof(Index));
         }
     }
