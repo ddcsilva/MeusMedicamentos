@@ -36,9 +36,7 @@ namespace MeusMedicamentos.Web.Controllers
                 return View(loginDTO);
             }
 
-            // Armazena o token na sessão
             HttpContext.Session.SetString("JWToken", token);
-            // Armazena o token em um cookie
             Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
 
             return RedirectToAction("Index", "Home");
@@ -51,6 +49,12 @@ namespace MeusMedicamentos.Web.Controllers
             HttpContext.Session.Remove("JWToken");
             Response.Cookies.Delete("JWToken");
             return RedirectToAction("Login", "Autenticacao");
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
     }
 }

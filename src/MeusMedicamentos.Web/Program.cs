@@ -36,7 +36,7 @@ builder.Services.AddAuthentication(options =>
 .AddCookie(options =>
 {
     options.LoginPath = "/Autenticacao/Login"; // Caminho para a página de login
-    options.AccessDeniedPath = "/Autenticacao/AcessoNegado"; // Caminho para a página de acesso negado, se necessário
+    options.AccessDeniedPath = "/Autenticacao/AccessDenied"; // Caminho para a página de acesso negado
 });
 
 builder.Services.AddAuthorization();
@@ -67,13 +67,13 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSession();
-app.UseJwtTokenMiddleware();
+app.UseJwtTokenMiddleware(); // Adicione esta linha para usar o middleware personalizado
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Autenticacao}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}"); // Definindo o controller e action padrão
 
 app.Run();
