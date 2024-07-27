@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeusMedicamentos.Application.Services
 {
@@ -29,8 +30,8 @@ namespace MeusMedicamentos.Application.Services
 
         public async Task<ApiResponse<IEnumerable<UsuarioDTO>>> ObterTodosUsuariosAsync()
         {
-            var usuarios = _userManager.Users.ToList();
-            var usuarioDTOs = usuarios.Select(u => new UsuarioDTO(u.Id, u.Nome, u.Email)).ToList();
+            var usuarios = await _userManager.Users.ToListAsync();
+            var usuarioDTOs = usuarios.Select(u => new UsuarioDTO(u.Id, u.Nome, u.Email ?? string.Empty));
             return new ApiResponse<IEnumerable<UsuarioDTO>>(usuarioDTOs, 200);
         }
 
@@ -42,7 +43,7 @@ namespace MeusMedicamentos.Application.Services
                 return new ApiResponse<UsuarioDTO>("Usuário não encontrado", 404);
             }
 
-            var usuarioDTO = new UsuarioDTO(usuario.Id, usuario.Nome, usuario.Email);
+            var usuarioDTO = new UsuarioDTO(usuario.Id, usuario.Nome, usuario.Email ?? string.Empty);
             return new ApiResponse<UsuarioDTO>(usuarioDTO, 200);
         }
 
