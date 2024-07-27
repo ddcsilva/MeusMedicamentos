@@ -19,13 +19,15 @@ namespace MeusMedicamentos.Application.Services
         private readonly SignInManager<Usuario> _signInManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<UsuarioService> _logger;
+        private readonly IEmailService _emailService;
 
-        public UsuarioService(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IConfiguration configuration, ILogger<UsuarioService> logger)
+        public UsuarioService(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IConfiguration configuration, ILogger<UsuarioService> logger, IEmailService emailService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
             _logger = logger;
+            _emailService = emailService;
         }
 
         public async Task<ApiResponse<IEnumerable<UsuarioDTO>>> ObterTodosUsuariosAsync()
@@ -60,8 +62,18 @@ namespace MeusMedicamentos.Application.Services
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Usuario");
+
+                // Enviar e-mail
+                var subject = "Bem-vindo ao MeusMedicamentos!";
+                var message = $@"
+                    <h1>Olá, {nome}</h1>
+                    <p>Seu usuário foi criado com sucesso.</p>
+                    <p>Seu nome de usuário é: <strong>{userName}</strong></p>";
+
+                await _emailService.SendEmailAsync(email, subject, message);
+
                 var usuarioDTO = new UsuarioDTO(user.Id, user.Nome, user.Email ?? string.Empty);
-                return new ApiResponse<UsuarioDTO>(usuarioDTO, 201) { Success = true };
+                return new ApiResponse<UsuarioDTO>(usuarioDTO, 201);
             }
 
             var errors = result.Errors.Select(e => e.Description).ToList();

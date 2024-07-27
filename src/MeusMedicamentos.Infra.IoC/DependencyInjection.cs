@@ -64,6 +64,8 @@ namespace MeusMedicamentos.Infra.IoC
             services.AddScoped<ICategoriaService, CategoriaService>();
             services.AddScoped<IUsuarioService, UsuarioService>();
             services.AddScoped<INotificadorErros, NotificadorErros>();
+            services.AddTransient<IEmailService, EmailService>();
+
         }
 
         private static void AdicionarValidadores(this IServiceCollection services)
