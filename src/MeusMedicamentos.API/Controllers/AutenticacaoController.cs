@@ -1,3 +1,4 @@
+using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.DTOs.Usuario;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
