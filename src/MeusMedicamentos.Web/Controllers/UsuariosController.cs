@@ -1,22 +1,25 @@
+using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authorization;
 using MeusMedicamentos.Application.DTOs.Usuario;
-using MeusMedicamentos.Application.DTOs;
+using Microsoft.Extensions.Logging;
 
 namespace MeusMedicamentos.Web.Controllers
 {
-    public class AutenticacaoController : Controller
+    public class UsuariosController : Controller
     {
-        private readonly IAutenticacaoService _autenticacaoService;
+        private readonly IUsuarioService _usuarioService;
+        private readonly ILogger<UsuariosController> _logger;
 
-        public AutenticacaoController(IAutenticacaoService autenticacaoService)
+        public UsuariosController(IUsuarioService usuarioService, ILogger<UsuariosController> logger)
         {
-            _autenticacaoService = autenticacaoService;
+            _usuarioService = usuarioService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -33,7 +36,7 @@ namespace MeusMedicamentos.Web.Controllers
                 return View(loginDTO);
             }
 
-            var token = await _autenticacaoService.AutenticarAsync(loginDTO.Usuario, loginDTO.Senha);
+            var token = await _usuarioService.AutenticarAsync(loginDTO.UserName, loginDTO.Senha);
 
             if (string.IsNullOrEmpty(token))
             {
@@ -41,12 +44,16 @@ namespace MeusMedicamentos.Web.Controllers
                 return View(loginDTO);
             }
 
+            _logger.LogInformation("Token recebido: {Token}", token);
+
             // Extraia os claims do token JWT
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
 
             var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId);
             var userNameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.UniqueName);
+
+            _logger.LogInformation("Claims extraídos - NameIdentifier: {NameIdentifier}, Name: {Name}", userIdClaim?.Value, userNameClaim?.Value);
 
             if (userIdClaim == null || userNameClaim == null || string.IsNullOrEmpty(userIdClaim.Value) || string.IsNullOrEmpty(userNameClaim.Value))
             {
@@ -78,7 +85,7 @@ namespace MeusMedicamentos.Web.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             HttpContext.Session.Remove("JWToken");
             Response.Cookies.Delete("JWToken");
-            return RedirectToAction("Login", "Autenticacao");
+            return RedirectToAction("Login", "Usuarios");
         }
 
         [HttpGet]
