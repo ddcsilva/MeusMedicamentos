@@ -1,19 +1,22 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using MeusMedicamentos.Application.DTOs.Usuario;
 using MeusMedicamentos.Application.Interfaces;
 using MeusMedicamentos.Domain.Entities;
+using MeusMedicamentos.Domain.Notifications;
+using MeusMedicamentos.Domain.Validations;
 using MeusMedicamentos.Shared;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 namespace MeusMedicamentos.Application.Services
 {
-    public class UsuarioService : IUsuarioService
+    public class UsuarioService : BaseService, IUsuarioService
     {
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
@@ -21,7 +24,8 @@ namespace MeusMedicamentos.Application.Services
         private readonly ILogger<UsuarioService> _logger;
         private readonly IEmailService _emailService;
 
-        public UsuarioService(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IConfiguration configuration, ILogger<UsuarioService> logger, IEmailService emailService)
+        public UsuarioService(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IConfiguration configuration, ILogger<UsuarioService> logger, IEmailService emailService, INotificadorErros notificadorErros)
+            : base(notificadorErros)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -49,8 +53,9 @@ namespace MeusMedicamentos.Application.Services
             return new ApiResponse<UsuarioDTO>(usuarioDTO, 200);
         }
 
-        public async Task<ApiResponse<UsuarioDTO>> CriarUsuarioAsync(string userName, string senha, string nome, string email)
+        public async Task<ApiResponse<UsuarioDTO>> CriarUsuarioAsync(string userName, string nome, string email)
         {
+            var senhaTemporaria = GerarSenhaTemporaria();
             var user = new Usuario
             {
                 UserName = userName,
@@ -58,7 +63,15 @@ namespace MeusMedicamentos.Application.Services
                 Email = email
             };
 
-            var result = await _userManager.CreateAsync(user, senha);
+            // Validação do usuário
+            var validationResult = await new UsuarioValidator().ValidateAsync(user);
+            if (!validationResult.IsValid)
+            {
+                Notificar(validationResult);
+                return new ApiResponse<UsuarioDTO>(validationResult.Errors.Select(e => e.ErrorMessage).ToList(), 400);
+            }
+
+            var result = await _userManager.CreateAsync(user, senhaTemporaria);
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Usuario");
@@ -68,7 +81,9 @@ namespace MeusMedicamentos.Application.Services
                 var message = $@"
                     <h1>Olá, {nome}</h1>
                     <p>Seu usuário foi criado com sucesso.</p>
-                    <p>Seu nome de usuário é: <strong>{userName}</strong></p>";
+                    <p>Seu nome de usuário é: <strong>{userName}</strong></p>
+                    <p>Sua senha temporária é: <strong>{senhaTemporaria}</strong></p>
+                    <p>Por favor, altere sua senha após o primeiro acesso.</p>";
 
                 await _emailService.SendEmailAsync(email, subject, message);
 
@@ -91,6 +106,14 @@ namespace MeusMedicamentos.Application.Services
             user.UserName = userName;
             user.Nome = nome;
             user.Email = email;
+
+            // Validação do usuário
+            var validationResult = await new UsuarioValidator().ValidateAsync(user);
+            if (!validationResult.IsValid)
+            {
+                Notificar(validationResult);
+                return new ApiResponse<UsuarioDTO>(validationResult.Errors.Select(e => e.ErrorMessage).ToList(), 400);
+            }
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -178,6 +201,37 @@ namespace MeusMedicamentos.Application.Services
             }
 
             return null;
+        }
+
+        private string GerarSenhaTemporaria()
+        {
+            var options = _userManager.Options.Password;
+            var password = new StringBuilder();
+            var random = new Random();
+
+            void AppendRandomChars(string chars, int count)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    password.Append(chars[random.Next(chars.Length)]);
+                }
+            }
+
+            // Adiciona caracteres obrigatórios
+            AppendRandomChars("ABCDEFGHJKLMNOPQRSTUVWXYZ", options.RequiredUniqueChars); // Letras maiúsculas
+            AppendRandomChars("abcdefghijkmnopqrstuvwxyz", options.RequiredUniqueChars); // Letras minúsculas
+            AppendRandomChars("0123456789", options.RequiredUniqueChars); // Números
+            AppendRandomChars("!@$?_-", options.RequiredUniqueChars); // Símbolos
+
+            // Adiciona caracteres restantes para atingir o comprimento mínimo
+            var allChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789!@$?_-";
+            while (password.Length < options.RequiredLength)
+            {
+                password.Append(allChars[random.Next(allChars.Length)]);
+            }
+
+            // Embaralha os caracteres para garantir que os caracteres obrigatórios não estejam sempre na mesma posição
+            return new string(password.ToString().OrderBy(c => random.Next()).ToArray());
         }
     }
 }

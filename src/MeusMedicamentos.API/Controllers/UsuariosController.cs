@@ -39,7 +39,7 @@ namespace MeusMedicamentos.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var response = await _usuarioService.CriarUsuarioAsync(usuarioDTO.UserName, usuarioDTO.Senha, usuarioDTO.Nome, usuarioDTO.Email);
+            var response = await _usuarioService.CriarUsuarioAsync(usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
             return CustomResponse(response);
         }
 
@@ -54,15 +54,15 @@ namespace MeusMedicamentos.API.Controllers
 
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var response = await _usuarioService.AtualizarUsuarioAsync(id, usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
-            return CustomResponse(response);
+            var result = await _usuarioService.AtualizarUsuarioAsync(id, usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
+            return CustomResponse(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(Guid id)
         {
-            var response = await _usuarioService.RemoverUsuarioAsync(id);
-            return CustomResponse(response);
+            var result = await _usuarioService.RemoverUsuarioAsync(id);
+            return CustomResponse(result);
         }
 
         [AllowAnonymous]
