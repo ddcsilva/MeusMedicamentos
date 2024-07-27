@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace MeusMedicamentos.Infra.IoC
 {
@@ -42,7 +43,7 @@ namespace MeusMedicamentos.Infra.IoC
 
         private static void AdicionarIdentity(this IServiceCollection services)
         {
-            services.AddIdentity<Usuario, IdentityRole>()
+            services.AddIdentity<Usuario, IdentityRole<Guid>>()
                 .AddEntityFrameworkStores<MeusMedicamentosContext>()
                 .AddDefaultTokenProviders();
         }

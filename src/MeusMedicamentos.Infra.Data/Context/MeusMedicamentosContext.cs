@@ -4,10 +4,11 @@ using MeusMedicamentos.Infra.Data.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace MeusMedicamentos.Infra.Data.Context
 {
-    public class MeusMedicamentosContext : IdentityDbContext<Usuario, IdentityRole, string, IdentityUserClaim<string>, IdentityUserRole<string>, IdentityUserLogin<string>, IdentityRoleClaim<string>, IdentityUserToken<string>>
+    public class MeusMedicamentosContext : IdentityDbContext<Usuario, IdentityRole<Guid>, Guid, IdentityUserClaim<Guid>, IdentityUserRole<Guid>, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
     {
         public MeusMedicamentosContext(DbContextOptions<MeusMedicamentosContext> options) : base(options) { }
 
@@ -37,32 +38,32 @@ namespace MeusMedicamentos.Infra.Data.Context
                 b.ToTable("TB_USUARIO");
             });
 
-            modelBuilder.Entity<IdentityRole>(b =>
+            modelBuilder.Entity<IdentityRole<Guid>>(b =>
             {
                 b.ToTable("TB_PAPEIS");
             });
 
-            modelBuilder.Entity<IdentityUserRole<string>>(b =>
+            modelBuilder.Entity<IdentityUserRole<Guid>>(b =>
             {
                 b.ToTable("TB_USUARIOS_PAPEIS");
             });
 
-            modelBuilder.Entity<IdentityUserClaim<string>>(b =>
+            modelBuilder.Entity<IdentityUserClaim<Guid>>(b =>
             {
                 b.ToTable("TB_USUARIOS_CLAIMS");
             });
 
-            modelBuilder.Entity<IdentityUserLogin<string>>(b =>
+            modelBuilder.Entity<IdentityUserLogin<Guid>>(b =>
             {
                 b.ToTable("TB_USUARIOS_LOGINS");
             });
 
-            modelBuilder.Entity<IdentityRoleClaim<string>>(b =>
+            modelBuilder.Entity<IdentityRoleClaim<Guid>>(b =>
             {
                 b.ToTable("TB_PAPEIS_CLAIMS");
             });
 
-            modelBuilder.Entity<IdentityUserToken<string>>(b =>
+            modelBuilder.Entity<IdentityUserToken<Guid>>(b =>
             {
                 b.ToTable("TB_USUARIOS_TOKENS");
             });

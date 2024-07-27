@@ -2,6 +2,7 @@ using System.Text;
 using MeusMedicamentos.Infra.IoC;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ builder.Configuration.AddUserSecrets<Program>();
 
 // Registra as dependências e Identity
 builder.Services.ResolverDependencias(builder.Configuration);
+
+builder.Services.AddHttpContextAccessor();
 
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 

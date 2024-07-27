@@ -13,7 +13,7 @@ namespace MeusMedicamentos.Infra.Data.Mappings
             builder.Property(c => c.Id)
                 .HasColumnName("CTG_ID")
                 .HasColumnOrder(1)
-                .HasColumnType("int")
+                .HasColumnType("char(36)") // Usando char(36) para armazenar Guid como string
                 .IsRequired()
                 .HasComment("Chave primária da categoria");
 
@@ -39,25 +39,24 @@ namespace MeusMedicamentos.Infra.Data.Mappings
                 .HasColumnType("datetime")
                 .HasComment("Data da Criação da Categoria");
 
+            builder.Property(c => c.UsuarioCriacaoId)
+                .HasColumnName("CTG_USUARIO_CRIACAO_ID")
+                .HasColumnOrder(5)
+                .HasColumnType("char(36)")
+                .IsRequired()
+                .HasComment("ID do Usuário Responsável pela Criação da Categoria");
+
             builder.Property(c => c.DataModificacao)
                 .HasColumnName("CTG_DATA_MODIFICACAO")
-                .HasColumnOrder(5)
+                .HasColumnOrder(6)
                 .HasColumnType("datetime")
                 .HasComment("Data da Última Modificação da Categoria")
                 .IsRequired(false);
 
-            builder.Property(c => c.UsuarioCriacaoId)
-                .HasColumnName("CTG_USUARIO_CRIACAO_ID")
-                .HasColumnOrder(6)
-                .HasMaxLength(50)
-                .HasColumnType("varchar(50)")
-                .HasComment("ID do Usuário Responsável pela Criação da Categoria");
-
             builder.Property(c => c.UsuarioModificacaoId)
                 .HasColumnName("CTG_USUARIO_MODIFICACAO_ID")
                 .HasColumnOrder(7)
-                .HasMaxLength(50)
-                .HasColumnType("varchar(50)")
+                .HasColumnType("char(36)")
                 .HasComment("ID do Usuário Responsável pela Modificação da Categoria")
                 .IsRequired(false);
 

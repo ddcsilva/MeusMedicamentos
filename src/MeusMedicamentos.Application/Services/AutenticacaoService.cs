@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System;
 
 namespace MeusMedicamentos.Application.Services
 {
@@ -51,7 +52,7 @@ namespace MeusMedicamentos.Application.Services
                         Subject = new ClaimsIdentity(new[]
                         {
                             new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id ?? string.Empty)
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                         }),
                         Expires = DateTime.UtcNow.AddMinutes(expiryMinutes),
                         Issuer = issuer,

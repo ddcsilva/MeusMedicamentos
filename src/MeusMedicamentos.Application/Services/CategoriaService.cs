@@ -7,6 +7,11 @@ using MeusMedicamentos.Domain.Interfaces;
 using MeusMedicamentos.Domain.Notifications;
 using MeusMedicamentos.Domain.Validations;
 using MeusMedicamentos.Shared;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Security.Claims;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MeusMedicamentos.Application.Services
 {
@@ -15,13 +20,21 @@ namespace MeusMedicamentos.Application.Services
         private readonly ICategoriaRepository _categoriaRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CategoriaService(ICategoriaRepository categoriaRepository, IUnitOfWork unitOfWork, IMapper mapper, IValidator<Categoria> validator, INotificadorErros notificador)
+        public CategoriaService(ICategoriaRepository categoriaRepository, IUnitOfWork unitOfWork, IMapper mapper, IValidator<Categoria> validator, INotificadorErros notificador, IHttpContextAccessor httpContextAccessor)
             : base(notificador)
         {
             _categoriaRepository = categoriaRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        private Guid GetUsuarioId()
+        {
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Guid.TryParse(userId, out var guid) ? guid : Guid.Empty;
         }
 
         public async Task<ApiResponse<IEnumerable<CategoriaDTO>>> ObterTodosAsync()
@@ -31,7 +44,7 @@ namespace MeusMedicamentos.Application.Services
             return new ApiResponse<IEnumerable<CategoriaDTO>>(categoriaDTOs, 200);
         }
 
-        public async Task<ApiResponse<CategoriaDTO>> ObterPorIdAsync(int id)
+        public async Task<ApiResponse<CategoriaDTO>> ObterPorIdAsync(Guid id)
         {
             var categoria = await _categoriaRepository.ObterPorIdAsync(id);
             if (categoria == null)
@@ -47,6 +60,7 @@ namespace MeusMedicamentos.Application.Services
         public async Task<ApiResponse<CategoriaDTO>> AdicionarAsync(CriarCategoriaDTO categoriaDTO)
         {
             var categoria = _mapper.Map<Categoria>(categoriaDTO);
+            categoria.SetUsuarioCriacaoId(GetUsuarioId());
 
             var existente = await _categoriaRepository.ObterPorCondicaoAsync(c => c.Nome == categoria.Nome);
             if (existente.Any())
@@ -84,6 +98,8 @@ namespace MeusMedicamentos.Application.Services
             }
 
             _mapper.Map(categoriaDTO, categoria);
+            categoria.SetUsuarioModificacaoId(GetUsuarioId());
+            categoria.SetDataModificacao();
 
             var validationResult = await new CategoriaValidator().ValidateAsync(categoria);
             if (!validationResult.IsValid)
@@ -104,7 +120,7 @@ namespace MeusMedicamentos.Application.Services
             return new ApiResponse<CategoriaDTO>(categoriaDtoRetorno, 200);
         }
 
-        public async Task<ApiResponse<bool>> RemoverAsync(int id)
+        public async Task<ApiResponse<bool>> RemoverAsync(Guid id)
         {
             var categoria = await _categoriaRepository.ObterPorIdAsync(id);
             if (categoria == null)

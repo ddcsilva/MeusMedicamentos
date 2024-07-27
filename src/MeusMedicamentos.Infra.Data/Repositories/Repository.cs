@@ -31,7 +31,7 @@ namespace MeusMedicamentos.Infra.Data.Repositories
                 : await _dbSet.Where(expression).ToListAsync();
         }
 
-        public async Task<TEntity?> ObterPorIdAsync(int id, bool rastrearAlteracoes = false)
+        public async Task<TEntity?> ObterPorIdAsync(Guid id, bool rastrearAlteracoes = false)
         {
             return !rastrearAlteracoes
                 ? await _dbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id)

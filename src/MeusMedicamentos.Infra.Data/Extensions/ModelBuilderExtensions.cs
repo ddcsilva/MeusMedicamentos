@@ -2,6 +2,7 @@ using MeusMedicamentos.Domain.Entities;
 using MeusMedicamentos.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace MeusMedicamentos.Infra.Data.Extensions
 {
@@ -15,13 +16,13 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
         private static void PopularUsuariosERoles(ModelBuilder modelBuilder)
         {
-            var adminRoleId = "1";
-            var adminUserId = "1";
+            var adminRoleId = Guid.NewGuid();
+            var adminUserId = Guid.NewGuid();
 
             var hasher = new PasswordHasher<Usuario>();
 
             // Adiciona o papel de administrador
-            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
+            modelBuilder.Entity<IdentityRole<Guid>>().HasData(new IdentityRole<Guid>
             {
                 Id = adminRoleId,
                 Name = "Administrador",
@@ -46,7 +47,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
             modelBuilder.Entity<Usuario>().HasData(adminUser);
 
             // Associa o usuário administrador ao papel de administrador
-            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
+            modelBuilder.Entity<IdentityUserRole<Guid>>().HasData(new IdentityUserRole<Guid>
             {
                 RoleId = adminRoleId,
                 UserId = adminUserId
@@ -55,11 +56,11 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
         private static void PopularCategorias(ModelBuilder modelBuilder)
         {
-            var adminUserId = "1";
+            var adminUserId = Guid.NewGuid();
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
-                Id = 1,
+                Id = Guid.NewGuid(),
                 Nome = "Analgésicos",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
@@ -68,7 +69,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
-                Id = 2,
+                Id = Guid.NewGuid(),
                 Nome = "Antibióticos",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
@@ -77,7 +78,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
-                Id = 3,
+                Id = Guid.NewGuid(),
                 Nome = "Anti-inflamatórios",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
@@ -86,7 +87,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
-                Id = 4,
+                Id = Guid.NewGuid(),
                 Nome = "Antipiréticos",
                 Status = EStatus.Inativo,
                 DataCriacao = DateTime.UtcNow,
@@ -95,7 +96,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
-                Id = 5,
+                Id = Guid.NewGuid(),
                 Nome = "Antissépticos",
                 Status = EStatus.Inativo,
                 DataCriacao = DateTime.UtcNow,
@@ -104,7 +105,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
-                Id = 6,
+                Id = Guid.NewGuid(),
                 Nome = "Broncodilatadores",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,

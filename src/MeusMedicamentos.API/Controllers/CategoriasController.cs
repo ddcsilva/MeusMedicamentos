@@ -27,7 +27,7 @@ namespace MeusMedicamentos.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> ObterPorId(int id)
+        public async Task<IActionResult> ObterPorId(Guid id)
         {
             var response = await _categoriaService.ObterPorIdAsync(id);
             return CustomResponse(response);
@@ -43,7 +43,7 @@ namespace MeusMedicamentos.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Atualizar(int id, [FromBody] EditarCategoriaDTO categoriaDTO)
+        public async Task<IActionResult> Atualizar(Guid id, [FromBody] EditarCategoriaDTO categoriaDTO)
         {
             if (id != categoriaDTO.Id)
             {
@@ -58,7 +58,7 @@ namespace MeusMedicamentos.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Remover(int id)
+        public async Task<IActionResult> Remover(Guid id)
         {
             var response = await _categoriaService.RemoverAsync(id);
             if (!response.Success)

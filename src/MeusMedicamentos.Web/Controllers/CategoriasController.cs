@@ -56,7 +56,7 @@ namespace MeusMedicamentos.Web.Controllers
             return View(categoriaDTO);
         }
 
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             var response = await _categoriaService.ObterPorIdAsync(id);
             if (response.Success && response.Data != null)
@@ -94,7 +94,7 @@ namespace MeusMedicamentos.Web.Controllers
             return View(categoriaDTO);
         }
 
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             var response = await _categoriaService.ObterPorIdAsync(id);
             if (response.Success && response.Data != null)
@@ -106,7 +106,7 @@ namespace MeusMedicamentos.Web.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             var response = await _categoriaService.RemoverAsync(id);
             if (response.Success)
