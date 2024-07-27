@@ -2,7 +2,6 @@ using MeusMedicamentos.Domain.Entities;
 using MeusMedicamentos.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace MeusMedicamentos.Infra.Data.Extensions
 {
@@ -18,6 +17,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
         {
             var adminRoleId = Guid.NewGuid();
             var adminUserId = Guid.NewGuid();
+            var usuarioRoleId = Guid.NewGuid();
 
             var hasher = new PasswordHasher<Usuario>();
 
@@ -27,6 +27,14 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Id = adminRoleId,
                 Name = "Administrador",
                 NormalizedName = "ADMINISTRADOR"
+            });
+
+            // Adiciona o papel de usuario
+            modelBuilder.Entity<IdentityRole<Guid>>().HasData(new IdentityRole<Guid>
+            {
+                Id = usuarioRoleId,
+                Name = "Usuario",
+                NormalizedName = "USUARIO"
             });
 
             // Adiciona o usuário administrador

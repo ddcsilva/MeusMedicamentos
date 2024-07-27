@@ -1,4 +1,4 @@
-using MeusMedicamentos.Application.DTOs;
+using MeusMedicamentos.Application.DTOs.Usuario;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,5 +25,20 @@ namespace MeusMedicamentos.API.Controllers
 
             return Ok(new { Token = token });
         }
+
+        // Novo endpoint para criar usuário
+        [HttpPost("criar-usuario")]
+        public async Task<IActionResult> CriarUsuario([FromBody] CriarUsuarioDTO criarUsuarioDTO)
+        {
+            var result = await _autenticacaoService.CriarUsuarioAsync(criarUsuarioDTO.Usuario, criarUsuarioDTO.Senha, criarUsuarioDTO.Nome, criarUsuarioDTO.Email);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok();
+        }
     }
 }
+

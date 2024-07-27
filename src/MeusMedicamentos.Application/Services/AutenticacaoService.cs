@@ -51,9 +51,9 @@ namespace MeusMedicamentos.Application.Services
                     {
                         Subject = new ClaimsIdentity(new[]
                         {
-                        new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                    }),
+                            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                        }),
                         Expires = DateTime.UtcNow.AddMinutes(expiryMinutes),
                         Issuer = issuer,
                         Audience = audience,
@@ -67,6 +67,25 @@ namespace MeusMedicamentos.Application.Services
             }
 
             return null;
+        }
+
+        // Novo método para criar usuário
+        public async Task<IdentityResult> CriarUsuarioAsync(string userName, string senha, string nome, string email)
+        {
+            var user = new Usuario
+            {
+                UserName = userName,
+                Nome = nome,
+                Email = email
+            };
+
+            var result = await _userManager.CreateAsync(user, senha);
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "Usuario");
+            }
+
+            return result;
         }
     }
 }
