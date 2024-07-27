@@ -47,7 +47,7 @@ namespace MeusMedicamentos.Application.Services
             return new ApiResponse<UsuarioDTO>(usuarioDTO, 200);
         }
 
-        public async Task<IdentityResult> CriarUsuarioAsync(string userName, string senha, string nome, string email)
+        public async Task<ApiResponse<UsuarioDTO>> CriarUsuarioAsync(string userName, string senha, string nome, string email)
         {
             var user = new Usuario
             {
@@ -60,35 +60,53 @@ namespace MeusMedicamentos.Application.Services
             if (result.Succeeded)
             {
                 await _userManager.AddToRoleAsync(user, "Usuario");
+                var usuarioDTO = new UsuarioDTO(user.Id, user.Nome, user.Email ?? string.Empty);
+                return new ApiResponse<UsuarioDTO>(usuarioDTO, 201) { Success = true };
             }
 
-            return result;
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            return new ApiResponse<UsuarioDTO>(errors, 400);
         }
 
-        public async Task<IdentityResult> AtualizarUsuarioAsync(Guid id, string userName, string nome, string email)
+        public async Task<ApiResponse<UsuarioDTO>> AtualizarUsuarioAsync(Guid id, string userName, string nome, string email)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                return IdentityResult.Failed(new IdentityError { Description = "Usuário não encontrado" });
+                return new ApiResponse<UsuarioDTO>("Usuário não encontrado", 404);
             }
 
             user.UserName = userName;
             user.Nome = nome;
             user.Email = email;
 
-            return await _userManager.UpdateAsync(user);
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                var usuarioDTO = new UsuarioDTO(user.Id, user.Nome, user.Email ?? string.Empty);
+                return new ApiResponse<UsuarioDTO>(usuarioDTO, 200);
+            }
+
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            return new ApiResponse<UsuarioDTO>(errors, 400);
         }
 
-        public async Task<IdentityResult> RemoverUsuarioAsync(Guid id)
+        public async Task<ApiResponse<bool>> RemoverUsuarioAsync(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                return IdentityResult.Failed(new IdentityError { Description = "Usuário não encontrado" });
+                return new ApiResponse<bool>("Usuário não encontrado", 404);
             }
 
-            return await _userManager.DeleteAsync(user);
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                return new ApiResponse<bool>(true, 204);
+            }
+
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            return new ApiResponse<bool>(errors, 400);
         }
 
         public async Task<string?> AutenticarAsync(string userName, string senha)

@@ -39,17 +39,8 @@ namespace MeusMedicamentos.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var result = await _usuarioService.CriarUsuarioAsync(usuarioDTO.UserName, usuarioDTO.Senha, usuarioDTO.Nome, usuarioDTO.Email);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    NotificarErro(error.Description);
-                }
-                return CustomResponse(new ApiResponse<string>("Erro ao adicionar usuário", 400));
-            }
-
-            return CustomResponse(new ApiResponse<string>("Usuário adicionado com sucesso", 201));
+            var response = await _usuarioService.CriarUsuarioAsync(usuarioDTO.UserName, usuarioDTO.Senha, usuarioDTO.Nome, usuarioDTO.Email);
+            return CustomResponse(response);
         }
 
         [HttpPut("{id}")]
@@ -63,33 +54,15 @@ namespace MeusMedicamentos.API.Controllers
 
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var result = await _usuarioService.AtualizarUsuarioAsync(id, usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    NotificarErro(error.Description);
-                }
-                return CustomResponse(new ApiResponse<string>("Erro ao atualizar usuário", 400));
-            }
-
-            return CustomResponse(new ApiResponse<string>("Usuário atualizado com sucesso", 200));
+            var response = await _usuarioService.AtualizarUsuarioAsync(id, usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
+            return CustomResponse(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Remover(Guid id)
         {
-            var result = await _usuarioService.RemoverUsuarioAsync(id);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    NotificarErro(error.Description);
-                }
-                return CustomResponse(new ApiResponse<string>("Erro ao remover usuário", 400));
-            }
-
-            return NoContent();
+            var response = await _usuarioService.RemoverUsuarioAsync(id);
+            return CustomResponse(response);
         }
 
         [AllowAnonymous]

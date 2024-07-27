@@ -15,33 +15,33 @@ namespace MeusMedicamentos.Shared
         public ApiResponse(T data, int statusCode = 200)
         {
             Success = true;
+            StatusCode = statusCode;
             Data = data;
             Errors = new List<string>();
-            StatusCode = statusCode;
         }
 
         public ApiResponse(List<string> errors, int statusCode = 400)
         {
             Success = false;
+            StatusCode = statusCode;
             Data = default;
             Errors = errors;
-            StatusCode = statusCode;
         }
 
         public ApiResponse(string error, int statusCode = 400)
         {
             Success = false;
+            StatusCode = statusCode;
             Data = default;
             Errors = new List<string> { error };
-            StatusCode = statusCode;
         }
 
         public ApiResponse(int statusCode)
         {
             Success = false;
+            StatusCode = statusCode;
             Data = default;
             Errors = new List<string>();
-            StatusCode = statusCode;
         }
     }
 }
