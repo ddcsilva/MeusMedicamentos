@@ -10,7 +10,6 @@
     <ProjectReference Include="..\MeusMedicamentos.Application\MeusMedicamentos.Application.csproj" />
     <ProjectReference Include="..\MeusMedicamentos.Domain\MeusMedicamentos.Domain.csproj" />
     <ProjectReference Include="..\MeusMedicamentos.Infra.Data\MeusMedicamentos.Infra.Data.csproj" />
-    <ProjectReference Include="..\MeusMedicamentos.Shared\MeusMedicamentos.Shared.csproj" />
   </ItemGroup>
 
 </Project>
