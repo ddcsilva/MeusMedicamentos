@@ -51,16 +51,18 @@ namespace MeusMedicamentos.Application.Services
                     {
                         Subject = new ClaimsIdentity(new[]
                         {
-                            new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
-                            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                        }),
+                        new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                    }),
                         Expires = DateTime.UtcNow.AddMinutes(expiryMinutes),
                         Issuer = issuer,
                         Audience = audience,
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
                     };
                     var token = tokenHandler.CreateToken(tokenDescriptor);
-                    return tokenHandler.WriteToken(token);
+                    var tokenString = tokenHandler.WriteToken(token);
+
+                    return tokenString;
                 }
             }
 

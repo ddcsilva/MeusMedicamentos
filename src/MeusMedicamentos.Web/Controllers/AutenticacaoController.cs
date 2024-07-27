@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace MeusMedicamentos.Web.Controllers
 {
@@ -39,21 +40,30 @@ namespace MeusMedicamentos.Web.Controllers
                 return View(loginDTO);
             }
 
-            // Adicionar o token JWT à sessão e aos cookies
-            HttpContext.Session.SetString("JWToken", token);
-            Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
+            // Extraia os claims do token JWT
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
 
-            // Autenticar o usuário manualmente usando cookies
+            var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId);
+            if (userIdClaim == null)
+            {
+                throw new InvalidOperationException("O token JWT não contém o ClaimTypes.NameIdentifier.");
+            }
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, loginDTO.Usuario),
-                new Claim(ClaimTypes.NameIdentifier, loginDTO.Usuario)
+                new Claim(ClaimTypes.Name, jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.UniqueName)?.Value),
+                new Claim(ClaimTypes.NameIdentifier, userIdClaim.Value)
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties();
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+
+            // Adicionar o token JWT à sessão e aos cookies
+            HttpContext.Session.SetString("JWToken", token);
+            Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
 
             return RedirectToAction("Index", "Home");
         }
