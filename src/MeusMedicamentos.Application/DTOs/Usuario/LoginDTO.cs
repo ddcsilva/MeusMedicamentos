@@ -1,4 +1,4 @@
-namespace MeusMedicamentos.Application.DTOs.Usuario
+namespace MeusMedicamentos.Application.DTOs
 {
     public record LoginDTO(string Usuario, string Senha);
 }
