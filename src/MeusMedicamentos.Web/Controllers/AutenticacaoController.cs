@@ -1,4 +1,3 @@
-using MeusMedicamentos.Application.DTOs;
 using MeusMedicamentos.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -6,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using MeusMedicamentos.Application.DTOs.Usuario;
+using MeusMedicamentos.Application.DTOs;
 
 namespace MeusMedicamentos.Web.Controllers
 {

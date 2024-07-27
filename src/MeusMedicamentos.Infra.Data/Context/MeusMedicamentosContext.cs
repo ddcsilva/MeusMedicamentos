@@ -4,7 +4,9 @@ using MeusMedicamentos.Infra.Data.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MeusMedicamentos.Infra.Data.Context
 {
@@ -26,6 +28,9 @@ namespace MeusMedicamentos.Infra.Data.Context
 
             // Configurar nomes de tabelas do Identity
             ConfigurarNomesTabelasIdentity(modelBuilder);
+
+            // Configurar relacionamento entre Categoria e Usuario
+            ConfigurarRelacionamentos(modelBuilder);
 
             // Popular dados iniciais
             modelBuilder.SeedData();
@@ -67,6 +72,23 @@ namespace MeusMedicamentos.Infra.Data.Context
             {
                 b.ToTable("TB_USUARIOS_TOKENS");
             });
+        }
+
+        private static void ConfigurarRelacionamentos(ModelBuilder modelBuilder)
+        {
+            // Configurar relacionamento entre Categoria e UsuarioCriacao
+            modelBuilder.Entity<Categoria>()
+                .HasOne(c => c.UsuarioCriacao)
+                .WithMany(u => u.CategoriasCriadas)
+                .HasForeignKey(c => c.UsuarioCriacaoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Configurar relacionamento entre Categoria e UsuarioModificacao
+            modelBuilder.Entity<Categoria>()
+                .HasOne(c => c.UsuarioModificacao)
+                .WithMany(u => u.CategoriasModificadas)
+                .HasForeignKey(c => c.UsuarioModificacaoId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
         public override int SaveChanges()

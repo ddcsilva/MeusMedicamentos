@@ -2,6 +2,7 @@ using MeusMedicamentos.Domain.Entities;
 using MeusMedicamentos.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace MeusMedicamentos.Infra.Data.Extensions
 {
@@ -16,7 +17,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
         private static void PopularUsuariosERoles(ModelBuilder modelBuilder)
         {
             var adminRoleId = Guid.NewGuid();
-            var adminUserId = Guid.NewGuid();
+            var adminUserId = Guid.Parse("fa0643ad-e33d-42c4-83fd-666ac8e1d59c");
             var usuarioRoleId = Guid.NewGuid();
 
             var hasher = new PasswordHasher<Usuario>();
@@ -64,7 +65,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 
         private static void PopularCategorias(ModelBuilder modelBuilder)
         {
-            var adminUserId = Guid.NewGuid();
+            var adminUserId = Guid.Parse("fa0643ad-e33d-42c4-83fd-666ac8e1d59c"); // Use the same ID as above
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
