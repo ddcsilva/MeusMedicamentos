@@ -45,14 +45,16 @@ namespace MeusMedicamentos.Web.Controllers
             var jwtToken = handler.ReadJwtToken(token);
 
             var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId);
-            if (userIdClaim == null)
+            var userNameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.UniqueName);
+
+            if (userIdClaim == null || userNameClaim == null || string.IsNullOrEmpty(userIdClaim.Value) || string.IsNullOrEmpty(userNameClaim.Value))
             {
-                throw new InvalidOperationException("O token JWT não contém o ClaimTypes.NameIdentifier.");
+                throw new InvalidOperationException("O token JWT não contém os claims necessários.");
             }
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.UniqueName)?.Value),
+                new Claim(ClaimTypes.Name, userNameClaim.Value),
                 new Claim(ClaimTypes.NameIdentifier, userIdClaim.Value)
             };
 
