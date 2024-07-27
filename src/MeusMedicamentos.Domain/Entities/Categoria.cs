@@ -8,5 +8,8 @@ namespace MeusMedicamentos.Domain.Entities
         }
 
         public string Nome { get; set; } = string.Empty;
+
+        public Usuario UsuarioCriacao { get; set; } = null!;
+        public Usuario? UsuarioModificacao { get; set; }
     }
 }
