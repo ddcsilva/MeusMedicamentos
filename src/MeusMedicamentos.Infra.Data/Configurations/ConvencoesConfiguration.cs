@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MeusMedicamentos.Infra.Data.Configurations
 {
-    public static class Convencoes
+    public static class ConvencoesConfiguration
     {
-        public static void AplicarConvencoes(ModelBuilder modelBuilder)
+        public static void AplicarConvencoes(this ModelBuilder modelBuilder)
         {
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

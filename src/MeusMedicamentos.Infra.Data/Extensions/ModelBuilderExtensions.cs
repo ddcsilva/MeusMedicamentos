@@ -8,13 +8,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
 {
     public static class ModelBuilderExtensions
     {
-        public static void SeedData(this ModelBuilder modelBuilder)
-        {
-            PopularUsuariosERoles(modelBuilder);
-            PopularCategorias(modelBuilder);
-        }
-
-        private static void PopularUsuariosERoles(ModelBuilder modelBuilder)
+        public static void PopularDados(this ModelBuilder modelBuilder)
         {
             var adminRoleId = Guid.NewGuid();
             var adminUserId = Guid.Parse("fa0643ad-e33d-42c4-83fd-666ac8e1d59c");
@@ -61,11 +55,8 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 RoleId = adminRoleId,
                 UserId = adminUserId
             });
-        }
 
-        private static void PopularCategorias(ModelBuilder modelBuilder)
-        {
-            var adminUserId = Guid.Parse("fa0643ad-e33d-42c4-83fd-666ac8e1d59c"); // Use the same ID as above
+            var adminUserIdForCategory = adminUserId; // Use the same ID as above
 
             modelBuilder.Entity<Categoria>().HasData(new
             {
@@ -73,7 +64,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Nome = "Analgésicos",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
-                UsuarioCriacaoId = adminUserId
+                UsuarioCriacaoId = adminUserIdForCategory
             });
 
             modelBuilder.Entity<Categoria>().HasData(new
@@ -82,7 +73,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Nome = "Antibióticos",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
-                UsuarioCriacaoId = adminUserId
+                UsuarioCriacaoId = adminUserIdForCategory
             });
 
             modelBuilder.Entity<Categoria>().HasData(new
@@ -91,7 +82,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Nome = "Anti-inflamatórios",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
-                UsuarioCriacaoId = adminUserId
+                UsuarioCriacaoId = adminUserIdForCategory
             });
 
             modelBuilder.Entity<Categoria>().HasData(new
@@ -100,7 +91,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Nome = "Antipiréticos",
                 Status = EStatus.Inativo,
                 DataCriacao = DateTime.UtcNow,
-                UsuarioCriacaoId = adminUserId
+                UsuarioCriacaoId = adminUserIdForCategory
             });
 
             modelBuilder.Entity<Categoria>().HasData(new
@@ -109,7 +100,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Nome = "Antissépticos",
                 Status = EStatus.Inativo,
                 DataCriacao = DateTime.UtcNow,
-                UsuarioCriacaoId = adminUserId
+                UsuarioCriacaoId = adminUserIdForCategory
             });
 
             modelBuilder.Entity<Categoria>().HasData(new
@@ -118,7 +109,7 @@ namespace MeusMedicamentos.Infra.Data.Extensions
                 Nome = "Broncodilatadores",
                 Status = EStatus.Ativo,
                 DataCriacao = DateTime.UtcNow,
-                UsuarioCriacaoId = adminUserId
+                UsuarioCriacaoId = adminUserIdForCategory
             });
         }
     }

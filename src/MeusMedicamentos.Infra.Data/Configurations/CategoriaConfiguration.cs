@@ -2,9 +2,9 @@ using MeusMedicamentos.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MeusMedicamentos.Infra.Data.Mappings
+namespace MeusMedicamentos.Infra.Data.Configurations
 {
-    public class CategoriaMapping : IEntityTypeConfiguration<Categoria>
+    public class CategoriaConfiguration : IEntityTypeConfiguration<Categoria>
     {
         public void Configure(EntityTypeBuilder<Categoria> builder)
         {
