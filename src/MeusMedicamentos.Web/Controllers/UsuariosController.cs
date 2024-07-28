@@ -1,97 +1,105 @@
 using MeusMedicamentos.Application.DTOs.Usuario;
 using MeusMedicamentos.Application.Interfaces;
 using MeusMedicamentos.Domain.Notifications;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Threading.Tasks;
 
-namespace MeusMedicamentos.Web.Controllers;
-
-public class UsuariosController : MainController
+namespace MeusMedicamentos.Web.Controllers
 {
-    private readonly IUsuarioService _usuarioService;
-    private readonly ILogger<UsuariosController> _logger;
-
-    public UsuariosController(IUsuarioService usuarioService, ILogger<UsuariosController> logger, INotificadorErros notificadorErros)
-        : base(notificadorErros)
-    {
-        _usuarioService = usuarioService;
-        _logger = logger;
-    }
-
-    [HttpGet]
-    public IActionResult Login()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Login(LoginDTO loginDTO)
-    {
-        if (!ModelState.IsValid)
-        {
-            NotificarErroModelInvalida();
-            return View(loginDTO);
-        }
-
-        var token = await _usuarioService.AutenticarAsync(loginDTO.UserName, loginDTO.Senha);
-
-        if (string.IsNullOrEmpty(token))
-        {
-            ModelState.AddModelError(string.Empty, "Login inválido.");
-            return View(loginDTO);
-        }
-
-        _logger.LogInformation("Token recebido: {Token}", token);
-
-        // Extraia os claims do token JWT
-        var handler = new JwtSecurityTokenHandler();
-        var jwtToken = handler.ReadJwtToken(token);
-
-        var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.NameId);
-        var userNameClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.UniqueName);
-
-        _logger.LogInformation("Claims extraídos - NameIdentifier: {NameIdentifier}, Name: {Name}", userIdClaim?.Value, userNameClaim?.Value);
-
-        if (userIdClaim == null || userNameClaim == null || string.IsNullOrEmpty(userIdClaim.Value) || string.IsNullOrEmpty(userNameClaim.Value))
-        {
-            throw new InvalidOperationException("O token JWT não contém os claims necessários.");
-        }
-
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, userNameClaim.Value),
-            new Claim(ClaimTypes.NameIdentifier, userIdClaim.Value)
-        };
-
-        var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var authProperties = new AuthenticationProperties();
-
-        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-
-        // Adicionar o token JWT à sessão e aos cookies
-        HttpContext.Session.SetString("JWToken", token);
-        Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
-
-        return RedirectToAction("Index", "Home");
-    }
-
-    [HttpPost]
     [Authorize]
-    public async Task<IActionResult> Logout()
+    public class UsuariosController : MainController
     {
-        await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        HttpContext.Session.Remove("JWToken");
-        Response.Cookies.Delete("JWToken");
-        return RedirectToAction("Login", "Usuarios");
-    }
+        private readonly IUsuarioService _usuarioService;
+        private readonly ILogger<UsuariosController> _logger;
 
-    [HttpGet]
-    public IActionResult AccessDenied()
-    {
-        return View();
+        public UsuariosController(IUsuarioService usuarioService, ILogger<UsuariosController> logger, INotificadorErros notificadorErros)
+            : base(notificadorErros)
+        {
+            _usuarioService = usuarioService;
+            _logger = logger;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var response = await _usuarioService.ObterTodosUsuariosAsync();
+            return CustomResponse(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var response = await _usuarioService.ObterPorIdAsync(id);
+            return CustomResponse(response);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(CriarUsuarioDTO usuarioDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                NotificarErroModelInvalida();
+                return View(usuarioDTO);
+            }
+
+            var response = await _usuarioService.CriarUsuarioAsync(usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
+            return CustomResponse(response, usuarioDTO);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var response = await _usuarioService.ObterPorIdAsync(id);
+            if (!response.Success)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var usuarioDTO = new EditarUsuarioDTO(response.Data.Id, response.Data.UserName, response.Data.Nome, response.Data.Email);
+            return View(usuarioDTO);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, EditarUsuarioDTO usuarioDTO)
+        {
+            if (id != usuarioDTO.Id)
+            {
+                ModelState.AddModelError(string.Empty, "Id da requisição difere do Id do objeto.");
+                return View(usuarioDTO);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                NotificarErroModelInvalida();
+                return View(usuarioDTO);
+            }
+
+            var response = await _usuarioService.AtualizarUsuarioAsync(id, usuarioDTO.UserName, usuarioDTO.Nome, usuarioDTO.Email);
+            return CustomResponse(response, usuarioDTO);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var response = await _usuarioService.RemoverUsuarioAsync(id);
+            if (response.Success)
+            {
+                return Ok();
+            }
+
+            return BadRequest(response.Errors);
+        }
     }
 }

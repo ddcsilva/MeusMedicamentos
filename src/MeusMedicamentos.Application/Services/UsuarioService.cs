@@ -37,7 +37,7 @@ namespace MeusMedicamentos.Application.Services
         public async Task<ApiResponse<IEnumerable<UsuarioDTO>>> ObterTodosUsuariosAsync()
         {
             var usuarios = await _userManager.Users.ToListAsync();
-            var usuarioDTOs = usuarios.Select(u => new UsuarioDTO(u.Id, u.Nome, u.Email ?? string.Empty));
+            var usuarioDTOs = usuarios.Select(u => new UsuarioDTO(u.Id, u.UserName ?? string.Empty, u.Nome, u.Email ?? string.Empty));
             return new ApiResponse<IEnumerable<UsuarioDTO>>(usuarioDTOs, 200);
         }
 
@@ -49,7 +49,7 @@ namespace MeusMedicamentos.Application.Services
                 return new ApiResponse<UsuarioDTO>("Usuário não encontrado", 404);
             }
 
-            var usuarioDTO = new UsuarioDTO(usuario.Id, usuario.Nome, usuario.Email ?? string.Empty);
+            var usuarioDTO = new UsuarioDTO(usuario.Id, usuario.UserName ?? string.Empty, usuario.Nome, usuario.Email ?? string.Empty);
             return new ApiResponse<UsuarioDTO>(usuarioDTO, 200);
         }
 
@@ -87,7 +87,7 @@ namespace MeusMedicamentos.Application.Services
 
                 await _emailService.SendEmailAsync(email, subject, message);
 
-                var usuarioDTO = new UsuarioDTO(user.Id, user.Nome, user.Email ?? string.Empty);
+                var usuarioDTO = new UsuarioDTO(user.Id, user.UserName, user.Nome, user.Email ?? string.Empty);
                 return new ApiResponse<UsuarioDTO>(usuarioDTO, 201);
             }
 
@@ -118,7 +118,7 @@ namespace MeusMedicamentos.Application.Services
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                var usuarioDTO = new UsuarioDTO(user.Id, user.Nome, user.Email ?? string.Empty);
+                var usuarioDTO = new UsuarioDTO(user.Id, user.UserName, user.Nome, user.Email ?? string.Empty);
                 return new ApiResponse<UsuarioDTO>(usuarioDTO, 200);
             }
 

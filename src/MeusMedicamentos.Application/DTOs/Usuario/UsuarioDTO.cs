@@ -1,4 +1,4 @@
 namespace MeusMedicamentos.Application.DTOs.Usuario
 {
-    public record UsuarioDTO(Guid Id, string Nome, string Email);
+    public record UsuarioDTO(Guid Id, string UserName, string Nome, string Email);
 }

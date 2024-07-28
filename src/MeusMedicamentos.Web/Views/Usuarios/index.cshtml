@@ -1,0 +1,87 @@
+@model IEnumerable<MeusMedicamentos.Application.DTOs.Usuario.UsuarioDTO>
+
+@{
+    ViewData["Title"] = "Lista de Usuários";
+}
+
+@Html.AntiForgeryToken()
+
+<h1>Lista de Usuários</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Criar Novo Usuário</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var usuario in Model)
+        {
+                <tr>
+                    <td>@usuario.Nome</td>
+                    <td>@usuario.Email</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@usuario.Id" class="btn btn-warning">Editar</a>
+                        <a asp-action="Details" asp-route-id="@usuario.Id" class="btn btn-info">Detalhes</a>
+                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" data-userid="@usuario.Id">Excluir</button>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal de confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmação de Exclusão</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Tem certeza que deseja excluir este usuário?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Excluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+        <script>
+            $(document).ready(function() {
+                var userIdToDelete;
+
+                $('#confirmDeleteModal').on('show.bs.modal', function(event) {
+                    var button = $(event.relatedTarget); // Button that triggered the modal
+                    userIdToDelete = button.data('userid'); // Extract info from data-* attributes
+                });
+
+                $('#confirmDeleteButton').on('click', function() {
+                    $.ajax({
+                        url: '/Usuarios/Delete/' + userIdToDelete,
+                        type: 'POST',
+                        headers: {
+                            'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                        },
+                        success: function(result) {
+                            $('#confirmDeleteModal').modal('hide');
+                            location.reload();
+                        },
+                        error: function(err) {
+                            console.error('Erro ao excluir o usuário:', err);
+                            alert('Ocorreu um erro ao tentar excluir o usuário.');
+                        }
+                    });
+                });
+            });
+        </script>
+}
