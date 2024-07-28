@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MeusMedicamentos.API.Controllers;
 
-[Authorize]
+// [Authorize]
 [Route("api/[controller]")]
 public class CategoriasController : MainController
 {
