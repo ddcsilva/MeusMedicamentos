@@ -47,7 +47,6 @@ public class UsuariosController : MainController
     {
         if (id != usuarioDTO.Id)
         {
-            NotificarErro("Erro ao atualizar o usuário: Id da requisição difere do Id do objeto");
             return CustomResponse(new ApiResponse<string>("Erro ao atualizar o usuário: Id da requisição difere do Id do objeto", 400));
         }
 

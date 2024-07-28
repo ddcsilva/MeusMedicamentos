@@ -47,7 +47,6 @@ public class CategoriasController : MainController
     {
         if (id != categoriaDTO.Id)
         {
-            NotificarErro("Erro ao atualizar a categoria: Id da requisição difere do Id do objeto");
             return CustomResponse(new ApiResponse<string>("Erro ao atualizar a categoria: Id da requisição difere do Id do objeto", 400));
         }
 
@@ -61,11 +60,6 @@ public class CategoriasController : MainController
     public async Task<IActionResult> Remover(Guid id)
     {
         var response = await _categoriaService.RemoverAsync(id);
-        if (!response.Success)
-        {
-            return CustomResponse(response);
-        }
-
-        return NoContent();
+        return CustomResponse(response);
     }
 }
