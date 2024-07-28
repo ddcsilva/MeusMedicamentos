@@ -1,15 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using System.Diagnostics;
 
-namespace MeusMedicamentos.Web.Controllers
+namespace MeusMedicamentos.Web.Controllers;
+
+[Authorize]
+public class HomeController : Controller
 {
-    [Authorize]
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }
