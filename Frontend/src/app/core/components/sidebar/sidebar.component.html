@@ -2,7 +2,7 @@
   <div class="logo bg-white">
     <a routerLink="/" class="d-flex align-items-center">
       <img src="assets/images/logo-icon.svg" alt="logo-icon" />
-      <span class="fw-extrabold"> Trinta </span>
+      <span class="fw-extrabold"> MedControl </span>
     </a>
   </div>
   <div class="burger-menu transition cursor-pointer" [ngClass]="{ active: isToggled }" (click)="toggle()">
@@ -14,11 +14,12 @@
     <div class="sidebar-inner">
       <div class="sidebar-menu">
         <mat-accordion>
-          <a routerLink="/apps" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <span class="sub-title text-body"> Cadastros Básicos </span>
+          <a routerLink="/categorias" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <i-feather name="file-text"></i-feather>
             <span class="title"> Categorias </span>
           </a>
-          <span class="sub-title text-body"> OTHERS </span>
+          <span class="sub-title text-body"> Conta </span>
           <a routerLink="/my-profile" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <i-feather name="user"></i-feather>
             <span class="title"> Meu Perfil </span>
@@ -78,12 +79,7 @@
               </li>
             </ul>
           </mat-expansion-panel>
-          <a
-            routerLink="/authentication/logout"
-            class="sidebar-menu-link"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
+          <a routerLink="/authentication/logout" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <i-feather name="home"></i-feather>
             <span class="title">Logout</span>
           </a>

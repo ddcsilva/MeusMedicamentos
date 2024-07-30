@@ -154,6 +154,7 @@ import { ListboxComponent } from './ui-elements/listbox/listbox.component';
 import { ListComponent } from './ui-elements/list/list.component';
 import { InputComponent } from './ui-elements/input/input.component';
 import { TooltipComponent } from './ui-elements/tooltip/tooltip.component';
+import { categoriasRoutes } from './features/categorias/categorias.routes';
 
 export const routes: Routes = [
     { path: '', component: BlankPageComponent },
@@ -396,7 +397,8 @@ export const routes: Routes = [
             { path: 'logout', component: LogoutComponent }
         ]
     },
-    // Here add new pages component
+
+    { path: 'categorias', children: categoriasRoutes },
 
     { path: '**', component: NotFoundComponent } // This line will remain down from the whole pages component list
 ];
