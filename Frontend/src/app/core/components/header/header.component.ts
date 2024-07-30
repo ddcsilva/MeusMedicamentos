@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { FeathericonsModule } from '../../icons/feathericons/feathericons.module';
 import { RouterLink } from '@angular/router';
 import { ToggleService } from './toggle.service';
+import { FeathericonsModule } from '../../../icons/feathericons/feathericons.module';
 
 @Component({
     selector: 'app-header',

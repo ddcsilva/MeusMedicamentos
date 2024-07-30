@@ -2,12 +2,12 @@ declare let $: any;
 import { filter } from 'rxjs/operators';
 import { isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { HeaderComponent } from './common/header/header.component';
-import { FooterComponent } from './common/footer/footer.component';
-import { ToggleService } from '../app/common/header/toggle.service';
-import { SidebarComponent } from './common/sidebar/sidebar.component';
+import { SidebarComponent } from './core/components/sidebar/sidebar.component';
 import { CommonModule, Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { RouterOutlet, Router, NavigationCancel, NavigationEnd, RouterLink } from '@angular/router';
+import { HeaderComponent } from './core/components/header/header.component';
+import { ToggleService } from './core/components/header/toggle.service';
+import { FooterComponent } from './core/components/footer/footer.component';
 
 @Component({
     selector: 'app-root',
@@ -52,7 +52,7 @@ export class AppComponent {
     }
 
     // ngOnInit
-    ngOnInit(){
+    ngOnInit() {
         if (isPlatformBrowser(this.platformId)) {
             this.recallJsFuntions();
         }
@@ -63,12 +63,12 @@ export class AppComponent {
         this.routerSubscription = this.router.events
             .pipe(filter(event => event instanceof NavigationEnd || event instanceof NavigationCancel))
             .subscribe(event => {
-            this.location = this.router.url;
-            if (!(event instanceof NavigationEnd)) {
-                return;
-            }
-            this.scrollToTop();
-        });
+                this.location = this.router.url;
+                if (!(event instanceof NavigationEnd)) {
+                    return;
+                }
+                this.scrollToTop();
+            });
     }
     scrollToTop() {
         if (isPlatformBrowser(this.platformId)) {

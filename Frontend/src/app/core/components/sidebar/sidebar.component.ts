@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { NgScrollbarModule } from 'ngx-scrollbar';
-import { ToggleService } from '../header/toggle.service';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
-import { FeathericonsModule } from '../../icons/feathericons/feathericons.module';
+import { FeathericonsModule } from '../../../icons/feathericons/feathericons.module';
+import { ToggleService } from '../header/toggle.service';
 
 @Component({
     selector: 'app-sidebar',
