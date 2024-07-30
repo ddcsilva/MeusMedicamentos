@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { NotFoundComponent } from './common/not-found/not-found.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 import { EcommerceComponent } from './dashboard/ecommerce/ecommerce.component';
 import { CrmComponent } from './dashboard/crm/crm.component';
 import { ProjectManagementComponent } from './dashboard/project-management/project-management.component';
@@ -77,7 +77,7 @@ import { MaterialSymbolsComponent } from './icons/material-symbols/material-symb
 import { ChartsComponent } from './charts/charts.component';
 import { ApexchartsComponent } from './charts/apexcharts/apexcharts.component';
 import { GaugeComponent } from './charts/gauge/gauge.component';
-import { InternalErrorComponent } from './common/internal-error/internal-error.component';
+import { InternalErrorComponent } from './shared/components/internal-error/internal-error.component';
 import { TimelinePageComponent } from './pages/timeline-page/timeline-page.component';
 import { BlankPageComponent } from './blank-page/blank-page.component';
 import { GalleryPageComponent } from './pages/gallery-page/gallery-page.component';
