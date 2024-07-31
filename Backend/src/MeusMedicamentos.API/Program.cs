@@ -90,6 +90,16 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+// Configuração do Kestrel para escutar HTTP e HTTPS
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5233); // HTTP
+    options.ListenAnyIP(7192, listenOptions =>
+    {
+        listenOptions.UseHttps(); // HTTPS
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -100,7 +110,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Aplicar a política de CORS
+// Aplicar a política de CORS antes de qualquer outro middleware
 app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
