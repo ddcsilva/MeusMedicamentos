@@ -36,7 +36,18 @@ public class CategoriasController : MainController
     [HttpPost]
     public async Task<IActionResult> Adicionar([FromBody] CriarCategoriaDTO categoriaDTO)
     {
-        if (!ModelState.IsValid) return CustomResponse(ModelState);
+        if (!ModelState.IsValid)
+        {
+            // Log do model state inválido
+            foreach (var value in ModelState.Values)
+            {
+                foreach (var error in value.Errors)
+                {
+                    Console.WriteLine($"Error: {error.ErrorMessage}");
+                }
+            }
+            return CustomResponse(ModelState);
+        }
 
         var response = await _categoriaService.AdicionarAsync(categoriaDTO);
         return CustomResponse(response);
