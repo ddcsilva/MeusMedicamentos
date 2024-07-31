@@ -24,7 +24,7 @@ import { FooterComponent } from './core/components/footer/footer.component';
 })
 export class AppComponent {
 
-    title = 'Trinta -  Angular 17 Material Design Admin Dashboard Template';
+    title = 'MedControl - Controle de Medicamentos Pessoais';
     routerSubscription: any;
     location: any;
 

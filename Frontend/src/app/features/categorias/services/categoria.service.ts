@@ -16,4 +16,20 @@ export class CategoriaService {
   obterCategorias(): Observable<ApiResponse<Categoria[]>> {
     return this.http.get<ApiResponse<Categoria[]>>(this.urlApi);
   }
+
+  obterCategoriaPorId(id: string): Observable<ApiResponse<Categoria>> {
+    return this.http.get<ApiResponse<Categoria>>(`${this.urlApi}/${id}`);
+  }
+
+  adicionarCategoria(categoria: any): Observable<ApiResponse<Categoria>> {
+    return this.http.post<ApiResponse<Categoria>>(this.urlApi, categoria);
+  }
+
+  atualizarCategoria(id: string, categoria: any): Observable<ApiResponse<Categoria>> {
+    return this.http.put<ApiResponse<Categoria>>(`${this.urlApi}/${id}`, categoria);
+  }
+
+  removerCategoria(id: string): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.urlApi}/${id}`);
+  }
 }

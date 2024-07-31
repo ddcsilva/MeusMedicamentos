@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonModule, NgIf } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-categoria-list',
@@ -24,7 +25,10 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private categoriaService: CategoriaService) { }
+  constructor(
+    private router: Router,
+    private categoriaService: CategoriaService
+  ) { }
 
   ngOnInit(): void {
     this.carregarCategorias();
@@ -47,5 +51,9 @@ export class CategoriaListComponent implements OnInit, AfterViewInit {
   aplicarFiltro(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  novaCategoria(): void {
+    this.router.navigate(['/categorias/criar']);
   }
 }
