@@ -1,0 +1,72 @@
+<div class="sign-in-area">
+  <div class="d-table">
+    <div class="d-table-cell">
+      <div class="trinta-form ml-auto mr-auto bg-white border-radius">
+        <div class="title text-center">
+          <h3>Sign In</h3>
+          <p class="text-black fs-15">
+            Don't have an account yet? <a routerLink="/auth/sign-up" class="text-primary fw-medium">Sign up here</a>
+          </p>
+        </div>
+        <div class="signin-with-socials">
+          <button type="button" mat-button>
+            <img src="assets/images/icons/google2.svg" alt="google" />
+            Sign In With Google
+          </button>
+          <div class="or text-center position-relative z-1 text-body">
+            <span class="d-inline-block bg-white">OR</span>
+          </div>
+        </div>
+        <form [formGroup]="autenticacaoForm" (ngSubmit)="onSubmit()">
+          <div class="form-group">
+            <label class="label d-block fw-medium mb-10">Username</label>
+            <mat-form-field>
+              <i-feather name="mail"></i-feather>
+              <mat-label>Enter username</mat-label>
+              <input matInput id="userName" formControlName="userName" />
+            </mat-form-field>
+            <div
+              class="error text-danger"
+              *ngIf="autenticacaoForm.get('userName')!.hasError('required') && autenticacaoForm.get('userName')!.touched"
+            >
+              Username is required.
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="label d-block fw-medium mb-10">Your Password</label>
+            <mat-form-field>
+              <i-feather name="lock"></i-feather>
+              <mat-label>Enter your password</mat-label>
+              <input matInput [type]="escondido ? 'password' : 'text'" id="senha" formControlName="senha" />
+              <button
+                mat-icon-button
+                matSuffix
+                (click)="escondido = !escondido"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="escondido"
+              >
+                <span class="material-symbols-outlined">
+                  {{ escondido ? "visibility_off" : "visibility" }}
+                </span>
+              </button>
+            </mat-form-field>
+            <div class="error text-danger" *ngIf="autenticacaoForm.get('senha')!.hasError('required') && autenticacaoForm.get('senha')!.touched">
+              Password is required.
+            </div>
+            <div
+              class="error text-danger"
+              *ngIf="autenticacaoForm.get('senha')!.hasError('minlength') && autenticacaoForm.get('senha')!.touched"
+            >
+              Password must be at least 8 characters long.
+            </div>
+          </div>
+          <div class="info d-flex justify-content-between align-items-center">
+            <mat-checkbox color="primary">Remember me</mat-checkbox>
+            <a routerLink="/auth/forgot-password" class="d-inline-block text-primary">Forgot your password?</a>
+          </div>
+          <button mat-button type="submit" [disabled]="autenticacaoForm.invalid">Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

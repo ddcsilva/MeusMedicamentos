@@ -57,7 +57,10 @@ builder.Services.AddSwaggerGen(options =>
 builder.Configuration.AddUserSecrets<Program>();
 
 // Registra as dependências e Identity
+builder.Services.AdicionarContexto(builder.Configuration);
+builder.Services.AdicionarIdentity();
 builder.Services.ResolverDependencias(builder.Configuration);
+builder.Services.AdicionarAutoMapper();
 
 builder.Services.AddHttpContextAccessor();
 

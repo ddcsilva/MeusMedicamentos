@@ -2,46 +2,45 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using MeusMedicamentos.Domain.Entities;
 
-namespace MeusMedicamentos.Infra.Data.Configurations
+namespace MeusMedicamentos.Infra.Data.Configurations;
+
+public static class IdentityConfiguration
 {
-    public static class IdentityConfiguration
+    public static void AplicarConfiguracoesIdentity(this ModelBuilder modelBuilder)
     {
-        public static void AplicarConfiguracoesIdentity(this ModelBuilder modelBuilder)
+        modelBuilder.Entity<Usuario>(b =>
         {
-            modelBuilder.Entity<Usuario>(b =>
-            {
-                b.ToTable("TB_USUARIO");
-            });
+            b.ToTable("TB_USUARIO");
+        });
 
-            modelBuilder.Entity<IdentityRole<Guid>>(b =>
-            {
-                b.ToTable("TB_PAPEIS");
-            });
+        modelBuilder.Entity<IdentityRole<Guid>>(b =>
+        {
+            b.ToTable("TB_ROLES");
+        });
 
-            modelBuilder.Entity<IdentityUserRole<Guid>>(b =>
-            {
-                b.ToTable("TB_USUARIOS_PAPEIS");
-            });
+        modelBuilder.Entity<IdentityUserRole<Guid>>(b =>
+        {
+            b.ToTable("TB_USUARIOS_ROLES");
+        });
 
-            modelBuilder.Entity<IdentityUserClaim<Guid>>(b =>
-            {
-                b.ToTable("TB_USUARIOS_CLAIMS");
-            });
+        modelBuilder.Entity<IdentityUserClaim<Guid>>(b =>
+        {
+            b.ToTable("TB_USUARIOS_CLAIMS");
+        });
 
-            modelBuilder.Entity<IdentityUserLogin<Guid>>(b =>
-            {
-                b.ToTable("TB_USUARIOS_LOGINS");
-            });
+        modelBuilder.Entity<IdentityUserLogin<Guid>>(b =>
+        {
+            b.ToTable("TB_USUARIOS_LOGINS");
+        });
 
-            modelBuilder.Entity<IdentityRoleClaim<Guid>>(b =>
-            {
-                b.ToTable("TB_PAPEIS_CLAIMS");
-            });
+        modelBuilder.Entity<IdentityRoleClaim<Guid>>(b =>
+        {
+            b.ToTable("TB_ROLES_CLAIMS");
+        });
 
-            modelBuilder.Entity<IdentityUserToken<Guid>>(b =>
-            {
-                b.ToTable("TB_USUARIOS_TOKENS");
-            });
-        }
+        modelBuilder.Entity<IdentityUserToken<Guid>>(b =>
+        {
+            b.ToTable("TB_USUARIOS_TOKENS");
+        });
     }
 }
