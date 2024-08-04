@@ -1,12 +1,11 @@
-namespace MeusMedicamentos.Domain.Notifications
-{
-    public class NotificacaoErros
-    {
-        public NotificacaoErros(string mensagem)
-        {
-            Mensagem = mensagem;
-        }
+namespace MeusMedicamentos.Domain.Notifications;
 
-        public string Mensagem { get; }
+public class NotificacaoErros
+{
+    private readonly string _mensagem;
+
+    public NotificacaoErros(string mensagem)
+    {
+        _mensagem = mensagem;
     }
 }

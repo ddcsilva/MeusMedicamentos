@@ -1,9 +1,8 @@
-namespace MeusMedicamentos.Domain.Notifications
+namespace MeusMedicamentos.Domain.Notifications;
+
+public interface INotificadorErros
 {
-    public interface INotificadorErros
-    {
-        void Handle(NotificacaoErros notificacao);
-        List<NotificacaoErros> ObterNotificacoes();
-        bool TemNotificacoes();
-    }
+    void Handle(NotificacaoErros notificacao);
+    List<NotificacaoErros> ObterNotificacoes();
+    bool TemNotificacoes();
 }

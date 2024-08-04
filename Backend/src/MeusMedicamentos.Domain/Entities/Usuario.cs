@@ -1,12 +1,11 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace MeusMedicamentos.Domain.Entities
-{
-    public class Usuario : IdentityUser<Guid>
-    {
-        public string Nome { get; set; } = string.Empty;
+namespace MeusMedicamentos.Domain.Entities;
 
-        public ICollection<Categoria> CategoriasCriadas { get; set; } = new List<Categoria>();
-        public ICollection<Categoria> CategoriasModificadas { get; set; } = new List<Categoria>();
-    }
+public class Usuario : IdentityUser<Guid>
+{
+    public string Nome { get; set; } = string.Empty;
+
+    public ICollection<Categoria> CategoriasCriadas { get; init; } = new List<Categoria>();
+    public ICollection<Categoria> CategoriasModificadas { get; init; } = new List<Categoria>();
 }

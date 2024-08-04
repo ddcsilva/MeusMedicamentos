@@ -60,7 +60,7 @@ namespace MeusMedicamentos.Application.Services
         public async Task<ApiResponse<CategoriaDTO>> AdicionarAsync(CriarCategoriaDTO categoriaDTO)
         {
             var categoria = _mapper.Map<Categoria>(categoriaDTO);
-            categoria.SetUsuarioCriacaoId(GetUsuarioId());
+            categoria.DefinirUsuarioCriacao(GetUsuarioId());
 
             var existente = await _categoriaRepository.ObterPorCondicaoAsync(c => c.Nome == categoria.Nome);
             if (existente.Any())
@@ -98,8 +98,8 @@ namespace MeusMedicamentos.Application.Services
             }
 
             _mapper.Map(categoriaDTO, categoria);
-            categoria.SetUsuarioModificacaoId(GetUsuarioId());
-            categoria.SetDataModificacao();
+            categoria.DefinirUsuarioModificacao(GetUsuarioId());
+            categoria.DefinirDataModificacao();
 
             var validationResult = await new CategoriaValidator().ValidateAsync(categoria);
             if (!validationResult.IsValid)

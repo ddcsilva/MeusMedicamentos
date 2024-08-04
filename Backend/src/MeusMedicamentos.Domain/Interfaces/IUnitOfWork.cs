@@ -1,10 +1,9 @@
-namespace MeusMedicamentos.Domain.Interfaces
+namespace MeusMedicamentos.Domain.Interfaces;
+
+public interface IUnitOfWork : IDisposable
 {
-    public interface IUnitOfWork : IDisposable
-    {
-        Task<bool> SalvarAlteracoesAsync();
-        Task IniciarTransacaoAsync();
-        Task SalvarTransacaoAsync();
-        Task DescartarTransacaoAsync();
-    }
+    Task<bool> SalvarAlteracoesAsync();
+    Task IniciarTransacaoAsync();
+    Task SalvarTransacaoAsync();
+    Task DescartarTransacaoAsync();
 }

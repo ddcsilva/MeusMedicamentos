@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MeusMedicamentos.API.Controllers;
 
-// [Authorize]
+[Authorize]
 [Route("api/[controller]")]
 public class CategoriasController : MainController
 {
@@ -38,14 +38,11 @@ public class CategoriasController : MainController
     {
         if (!ModelState.IsValid)
         {
-            // Log do model state inválido
-            foreach (var value in ModelState.Values)
+            foreach (var error in ModelState.Values.SelectMany(value => value.Errors))
             {
-                foreach (var error in value.Errors)
-                {
-                    Console.WriteLine($"Error: {error.ErrorMessage}");
-                }
+                Console.WriteLine($"Error: {error.ErrorMessage}");
             }
+
             return CustomResponse(ModelState);
         }
 

@@ -9,7 +9,7 @@ import { ApiResponse } from '../../../core/models/api-response.model';
   providedIn: 'root'
 })
 export class CategoriaService {
-  private urlApi = `${environment.apiUrl}/categorias`;
+  private urlApi = `${environment.urlApi}/categorias`;
 
   constructor(private http: HttpClient) { }
 

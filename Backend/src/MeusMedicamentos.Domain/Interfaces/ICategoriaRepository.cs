@@ -1,8 +1,7 @@
 using MeusMedicamentos.Domain.Entities;
 
-namespace MeusMedicamentos.Domain.Interfaces
+namespace MeusMedicamentos.Domain.Interfaces;
+
+public interface ICategoriaRepository : IRepository<Categoria>
 {
-    public interface ICategoriaRepository : IRepository<Categoria>
-    {
-    }
 }

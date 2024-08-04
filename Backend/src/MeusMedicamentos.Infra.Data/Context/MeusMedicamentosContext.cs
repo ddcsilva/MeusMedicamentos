@@ -45,7 +45,7 @@ namespace MeusMedicamentos.Infra.Data.Context
             foreach (var entry in entries)
             {
                 var entity = (Entity)entry.Entity;
-                entity.SetDataModificacao();
+                entity.DefinirDataModificacao();
             }
         }
     }
