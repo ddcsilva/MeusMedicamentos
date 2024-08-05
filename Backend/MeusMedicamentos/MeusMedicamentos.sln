@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Api", "MeusMedicamentos.Api\MeusMedicamentos.Api.csproj", "{D356B551-0198-4387-AC7A-314C08AE65CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.Contracts", "MeusMedicamentos.Contracts\MeusMedicamentos.Contracts.csproj", "{3205DB0B-28F3-4EB6-A1AD-2071F72514DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeusMedicamentos.LoggerService", "MeusMedicamentos.LoggerService\MeusMedicamentos.LoggerService.csproj", "{ED7CBC0C-AB72-4D99-86E2-3737FDFB383D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{D356B551-0198-4387-AC7A-314C08AE65CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D356B551-0198-4387-AC7A-314C08AE65CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D356B551-0198-4387-AC7A-314C08AE65CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3205DB0B-28F3-4EB6-A1AD-2071F72514DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3205DB0B-28F3-4EB6-A1AD-2071F72514DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3205DB0B-28F3-4EB6-A1AD-2071F72514DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3205DB0B-28F3-4EB6-A1AD-2071F72514DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED7CBC0C-AB72-4D99-86E2-3737FDFB383D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED7CBC0C-AB72-4D99-86E2-3737FDFB383D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED7CBC0C-AB72-4D99-86E2-3737FDFB383D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED7CBC0C-AB72-4D99-86E2-3737FDFB383D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
