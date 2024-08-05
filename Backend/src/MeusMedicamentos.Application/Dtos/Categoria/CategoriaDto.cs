@@ -2,5 +2,5 @@ using MeusMedicamentos.Domain.Enums;
 
 namespace MeusMedicamentos.Application.DTOs
 {
-    public record CategoriaDTO(Guid Id, string Nome, EStatus Status);
+    public record CategoriaDto(Guid Id, string Nome, EStatus Status);
 }
