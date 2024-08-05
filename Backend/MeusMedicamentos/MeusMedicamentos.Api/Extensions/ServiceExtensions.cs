@@ -1,3 +1,6 @@
+using MeusMedicamentos.Contracts;
+using MeusMedicamentos.LoggerService;
+
 namespace MeusMedicamentos.Api.Extensions;
 
 public static class ServiceExtensions
@@ -21,5 +24,10 @@ public static class ServiceExtensions
         {
 
         });
+    }
+    
+    public static void ConfigurarLoggerService(this IServiceCollection services)
+    {
+        services.AddSingleton<ILoggerManager, LoggerManager>();
     }
 }

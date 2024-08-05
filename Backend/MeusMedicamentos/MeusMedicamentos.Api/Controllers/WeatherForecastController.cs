@@ -1,3 +1,4 @@
+using MeusMedicamentos.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MeusMedicamentos.Api.Controllers;
@@ -6,27 +7,21 @@ namespace MeusMedicamentos.Api.Controllers;
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
-    private readonly ILogger<WeatherForecastController> _logger;
-
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    private readonly ILoggerManager _logger;
+    
+    public WeatherForecastController(ILoggerManager logger)
     {
         _logger = logger;
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    public IEnumerable<WeatherForecast> Get()
+    [HttpGet]
+    public IEnumerable<string> Get()
     {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+        _logger.LogInformativo("Esta é uma mensagem informativa.");
+        _logger.LogAdvertencia("Esta é uma mensagem de advertência.");
+        _logger.LogDebug("Esta é uma mensagem de debug.");
+        _logger.LogErro("Esta é uma mensagem de erro.");
+
+        return new[] { "value1", "value2" };
     }
 }
